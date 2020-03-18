@@ -1,8 +1,8 @@
 #[derive(Debug)]
 pub struct Account {
-    no: u32,
-    name: String,
-    deposit: i128,
+    pub no: u32,
+    pub name: String,
+    pub deposit: i128,
 }
 
 impl Account {
