@@ -49,8 +49,17 @@ mod tests {
         assert_eq!(account.Withdraw(100), Ok("Withdraw successfully"));
     }
 
+    #[test]
     fn should_not_withdraw() {
         let mut account: Account = Account::new(1, "Jack".to_string(), 100);
         assert_eq!(account.Withdraw(101), Err("You don't have enough deposit to withdraw"));
     }
+
+    #[test]
+    fn should_determine_withdrawl() {
+        let mut account: Account = Account::new(1, "Jack".to_string(), 100);
+        assert_eq!(account.CanWithdraw(50), true);
+        assert_eq!(account.CanWithdraw(100), true);
+        assert_eq!(account.CanWithdraw(101), false);
+    }   
 }
