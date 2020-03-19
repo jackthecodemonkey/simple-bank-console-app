@@ -1,7 +1,6 @@
 use super::AccountModel::Account;
 use super::AccountsModel::Accounts;
 use super::TransferModel::Transfer;
-use std::rc::Rc;
 
 #[derive(Debug)]
 pub struct Bank {
@@ -19,13 +18,30 @@ impl Bank {
         &self.accounts.AddAccount(account);
     }
 
-    pub fn FindByAccountNo<'a>(&'a mut self, accountNo: u32) -> Result<&'a mut Account, String> {
+    pub fn FindByAccountNo<'a>(
+        &'a mut self,
+        accountNo: u32,
+    ) -> Result<&'a mut Account, &'static str> {
         self.accounts.FindByAccountNo(accountNo)
     }
 
-    pub fn Deposit(&mut self, accountNo: u32, amount: i128) -> Result<&Account, String> {
+    pub fn Deposit(&mut self, accountNo: u32, amount: i128) -> Result<&Account, &'static str> {
         let account = self.FindByAccountNo(accountNo)?;
         account.Deposit(amount);
         Ok(account)
+    }
+
+    pub fn Transfer(&mut self, transfer: Transfer) -> Result<&'static str, &'static str> {
+        let fromAccount = self.FindByAccountNo(transfer.from)?;
+        match fromAccount.CanWithdraw(transfer.amount) {
+            true => {
+                fromAccount.Withdraw(transfer.amount);
+                self.Deposit(transfer.to, transfer.amount);
+                return Ok("Transfer successfully");
+            }
+            false => {
+                return Err("Your account doesn't have enough depost to transfer");
+            }
+        }
     }
 }

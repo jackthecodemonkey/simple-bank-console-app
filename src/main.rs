@@ -15,6 +15,6 @@ fn main() {
     bank.AddAccount(account);
     bank.AddAccount(account2);
 
-    println!("{:?}", bank.FindByAccountNo(4534556));
+    println!("{:?}", bank.Deposit(4534556,156000));
 
 }

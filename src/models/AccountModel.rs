@@ -19,7 +19,11 @@ impl Account {
         return "Deposit successfully";
     }
 
-    fn Withdraw(mut self, amount: i128) -> Result<&'static str, &'static str> {
+    pub fn CanWithdraw(&mut self, amount: i128) -> bool {
+        return self.deposit < amount;
+    }
+
+    pub fn Withdraw(&mut self, amount: i128) -> Result<&'static str, &'static str> {
         return match self.deposit < amount {
             true => Err("You don't have enough deposit to withdraw"),
             false => {
