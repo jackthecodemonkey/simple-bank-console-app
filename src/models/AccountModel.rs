@@ -14,7 +14,7 @@ impl Account {
         }
     }
 
-    fn Deposit(mut self, amount: i128) -> &'static str {
+    pub fn Deposit(&mut self, amount: i128) -> &'static str {
         self.deposit = self.deposit + amount;
         return "Deposit successfully";
     }
