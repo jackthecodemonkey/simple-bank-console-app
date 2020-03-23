@@ -16,12 +16,7 @@ fn main() {
     bank.AddAccount(account);
     bank.AddAccount(account2);
 
-    let result: Result<&str, &str> = bank.Transfer(Transfer {
-        from: 1534556,
-        to: 4534556,
-        amount: 1000,
-    });
+    bank.Delete_account(151234556);
 
-    println!("{:?}",result);
-    println!("{:?}",bank);
+    println!("{:?}", bank);
 }       
