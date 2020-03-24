@@ -1,13 +1,28 @@
-use super::super::traits::BankServiceTrait::BankServiceTrait;
+use std::fs::File;
+
 use super::super::models::AccountModel::Account;
 use super::super::models::TransferModel::Transfer;
+use super::super::traits::BankServiceTrait::BankServiceTrait;
+
+use std::io::prelude::*;
 
 #[derive(Debug)]
 pub struct TextContext {
-    pub dbContext: String,
+    pub dbContext: File,
 }
 
 impl BankServiceTrait for TextContext {
+    fn LoadData (&mut self) -> &'static str {
+        let mut contents = String::new();
+        let buf_content: usize = match self.dbContext.read_to_string(&mut contents) {
+            Ok(content) => content,
+            Err(_) => 10,
+        };
+
+        println!("{:?}", contents);
+
+        "Not implemented yet"
+    }
     fn AddAccount(&mut self, account: Account) -> &'static str {
         "Not implemented yet"
     }

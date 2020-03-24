@@ -2,26 +2,39 @@ mod models;
 mod traits;
 mod services;
 
-use models::AccountModel::Account;
-use models::AccountsModel::Accounts;
-use models::BankModel::Bank;
-use models::TransferModel::Transfer;
+// use models::AccountModel::Account;
+// use models::AccountsModel::Accounts;
+// use models::BankModel::Bank;
+// use models::TransferModel::Transfer;
 
-use services::BankService::BankService;
-use services::SQLContext::SQLContext;
+// use services::BankService::BankService;
+// use services::SQLContext::SQLContext;
 use services::TextContext::TextContext;
+use traits::BankServiceTrait::BankServiceTrait;
+
+use std::fs::File;
+use std::path::Path;
 
 fn main() {
-    let sqlContext: SQLContext = SQLContext { dbContext: 10 };
-    let textContext: TextContext = TextContext {
-        dbContext: String::from("TEXT"),
+    let path = Path::new("./src/dataSource/data.txt");
+    let display = path.display();
+
+    let mut file = match File::open(&path) {
+        Ok(file) => file,
+        Err(why) => panic!("couldn't open {}",display), 
     };
 
-    let bankService: BankService<SQLContext> = BankService {
-        dbContext: sqlContext,
+    let mut textContext: TextContext = TextContext {
+        dbContext: file,
     };
 
-    println!("{:?}", bankService);
+    textContext.LoadData();
+
+    // let bankService: BankService<SQLContext> = BankService {
+    //     dbContext: sqlContext,
+    // };
+
+    // println!("{:?}", bankService);
 
     // let account = Account::new(1534556, String::from("Jack"), 1000);
     // let account2 = Account::new(4534556, String::from("Seiko"), 5000);

@@ -1,6 +1,6 @@
-use super::super::traits::BankServiceTrait::BankServiceTrait;
 use super::super::models::AccountModel::Account;
 use super::super::models::TransferModel::Transfer;
+use super::super::traits::BankServiceTrait::BankServiceTrait;
 
 #[derive(Debug)]
 pub struct BankService<T> {
@@ -8,6 +8,9 @@ pub struct BankService<T> {
 }
 
 impl<T> BankServiceTrait for BankService<T> {
+    fn LoadData(&mut self) -> &'static str {
+        "Not implemented yet"
+    }
     fn AddAccount(&mut self, account: Account) -> &'static str {
         "Not implemented yet"
     }
