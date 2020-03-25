@@ -1,4 +1,5 @@
 use super::super::models::AccountModel::Account;
+use super::super::models::AccountsModel::Accounts;
 use super::super::models::TransferModel::Transfer;
 use super::super::traits::BankServiceTrait::BankServiceTrait;
 
@@ -8,8 +9,10 @@ pub struct SQLContext {
 }
 
 impl BankServiceTrait for SQLContext {
-    fn LoadData(&mut self) -> &'static str {
-        "Not implemented yet"
+    fn LoadData(&mut self) -> Accounts {
+        Accounts {
+            accounts: Vec::new()
+        }
     }
     fn AddAccount(&mut self, account: Account) -> &'static str {
         "Not implemented yet"

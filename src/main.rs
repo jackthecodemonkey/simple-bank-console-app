@@ -28,7 +28,7 @@ fn main() {
         dbContext: file,
     };
 
-    textContext.LoadData();
+    println!("{:?}", textContext.LoadData());
 
     // let bankService: BankService<SQLContext> = BankService {
     //     dbContext: sqlContext,
