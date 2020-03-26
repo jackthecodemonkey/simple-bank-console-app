@@ -17,6 +17,14 @@ impl Accounts {
         };
     }
 
+    pub fn HasAccount(&self, accountNo: u32) -> bool {
+        let mut iter = self.accounts.iter();
+        return match iter.find(|acc| acc.no == accountNo) {
+            Some(_) => true,
+            None => false,
+        };
+    }
+
     pub fn AddAccount(&mut self, account: Account) {
         &self.accounts.push(account);
     }

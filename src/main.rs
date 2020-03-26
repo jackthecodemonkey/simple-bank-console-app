@@ -2,16 +2,17 @@ mod models;
 mod traits;
 mod services;
 
-// use models::AccountModel::Account;
-// use models::AccountsModel::Accounts;
-// use models::BankModel::Bank;
-// use models::TransferModel::Transfer;
+use models::AccountModel::Account;
+use models::AccountsModel::Accounts;
+use models::BankModel::Bank;
+use models::TransferModel::Transfer;
 
 // use services::BankService::BankService;
 // use services::SQLContext::SQLContext;
 use services::TextContext::TextContext;
 use traits::BankServiceTrait::BankServiceTrait;
 
+use std::fs::OpenOptions;
 use std::fs::File;
 use std::path::Path;
 
@@ -24,11 +25,24 @@ fn main() {
         Err(why) => panic!("couldn't open {}",display), 
     };
 
+    let openOptions = OpenOptions::new().read(true).append(true).open(&path).unwrap();
+
     let mut textContext: TextContext = TextContext {
         dbContext: file,
+        openOptions: openOptions,
     };
 
-    println!("{:?}", textContext.LoadData());
+    textContext.LoadData();
+
+    let acc: Account = Account {
+        no: 6,
+        name: String::from("VicVic"),
+        deposit: 8900,
+    };
+
+    textContext.AddAccount(acc);
+
+    // println!("{:?}", textContext.LoadData());
 
     // let bankService: BankService<SQLContext> = BankService {
     //     dbContext: sqlContext,

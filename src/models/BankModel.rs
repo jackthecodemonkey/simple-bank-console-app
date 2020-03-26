@@ -14,8 +14,12 @@ impl Bank {
 }
 
 impl Bank {
-    pub fn AddAccount(&mut self, account: Account) {
-        &self.accounts.AddAccount(account);
+    pub fn AddAccount(&mut self, account: Account) -> Result<&'static str, &'static str> {
+        if self.accounts.HasAccount(account.no) == false {
+            self.accounts.AddAccount(account);
+            return Ok("Account has added successfully");
+        }
+        return Err("Account already exists");
     }
 
     pub fn FindByAccountNo<'a>(
@@ -145,5 +149,22 @@ mod tests {
 
         bank.Delete_account(123);
         assert_eq!(bank.accounts.accounts.len(), 2);
+    }
+
+    #[test]
+    fn should_not_create_duplicate_accounts() {
+        let account = Account::new(1, String::from("Jack"), 1000);
+        let account2 = Account::new(3, String::from("Seiko"), 5000);
+        let account3 = Account::new(3, String::from("Mia"), 5000);
+        let mut accounts = Vec::new();
+        accounts.push(account);
+        accounts.push(account2);
+
+        let acc = Accounts { accounts };
+        let mut bank = Bank { accounts: acc };
+
+        if let Err(err) = bank.AddAccount(account3) {
+            assert_eq!(err, "Account already exists");
+        }
     }
 }

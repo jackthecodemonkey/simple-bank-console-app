@@ -5,19 +5,20 @@ use super::super::models::AccountsModel::Accounts;
 use super::super::models::TransferModel::Transfer;
 use super::super::traits::BankServiceTrait::BankServiceTrait;
 
+use std::fs::OpenOptions;
 use std::io::prelude::*;
 use std::str::FromStr;
 
 #[derive(Debug)]
 pub struct TextContext {
     pub dbContext: File,
+    pub openOptions: File,
 }
 
 impl BankServiceTrait for TextContext {
     fn LoadData(&mut self) -> Accounts {
         let mut contents = String::new();
         self.dbContext.read_to_string(&mut contents);
-
         Accounts {
             accounts: contents
                 .split("\r\n")
@@ -36,7 +37,16 @@ impl BankServiceTrait for TextContext {
         }
     }
     fn AddAccount(&mut self, account: Account) -> &'static str {
-        "Not implemented yet"
+        let mut s: String = String::from("\r\n");
+        s.push_str(&account.no.to_string());
+        s.push_str(",");
+        s.push_str(&account.name.to_string());
+        s.push_str(",");
+        s.push_str(&account.deposit.to_string());
+        if let Err(e) = writeln!(self.openOptions, "{}", s.as_str()) {
+            return "Failed to add a new account";
+        }
+        return "Account added successfully";
     }
     fn DeleteAccount(&mut self, account_no: u32) -> &'static str {
         "Not implemented yet"
