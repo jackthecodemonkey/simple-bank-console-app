@@ -43,7 +43,7 @@ impl BankServiceTrait for TextContext {
         s.push_str(&account.name.to_string());
         s.push_str(",");
         s.push_str(&account.deposit.to_string());
-        if let Err(e) = writeln!(self.openOptions, "{}", s.as_str()) {
+        if let Err(e) = write!(self.openOptions, "{}", s.as_str()) {
             return "Failed to add a new account";
         }
         return "Account added successfully";

@@ -2,3 +2,6 @@
 2,Seiko,3000
 3,Mia,500
 4,Victor,1900
+6,VicVic,8900
+7,VicVic,8900
+8,VicVic,8900

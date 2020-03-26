@@ -35,7 +35,7 @@ fn main() {
     textContext.LoadData();
 
     let acc: Account = Account {
-        no: 6,
+        no: 8,
         name: String::from("VicVic"),
         deposit: 8900,
     };
