@@ -42,6 +42,9 @@ fn main() {
 
     textContext.AddAccount(acc);
 
+    textContext.DeleteAccount(8);
+
+
     // println!("{:?}", textContext.LoadData());
 
     // let bankService: BankService<SQLContext> = BankService {

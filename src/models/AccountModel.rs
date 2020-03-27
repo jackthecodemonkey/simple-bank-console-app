@@ -28,6 +28,16 @@ impl Account {
             }
         };
     }
+
+    pub fn Stringify(self) -> String {
+        let mut s: String = String::from("\r\n");
+        s.push_str(&self.no.to_string());
+        s.push_str(",");
+        s.push_str(&self.name.to_string());
+        s.push_str(",");
+        s.push_str(&self.deposit.to_string());
+        s
+    }
 }
 
 #[cfg(test)]
@@ -52,7 +62,10 @@ mod tests {
     #[test]
     fn should_not_withdraw() {
         let mut account: Account = Account::new(1, "Jack".to_string(), 100);
-        assert_eq!(account.Withdraw(101), Err("You don't have enough deposit to withdraw"));
+        assert_eq!(
+            account.Withdraw(101),
+            Err("You don't have enough deposit to withdraw")
+        );
     }
 
     #[test]
@@ -61,5 +74,5 @@ mod tests {
         assert_eq!(account.CanWithdraw(50), true);
         assert_eq!(account.CanWithdraw(100), true);
         assert_eq!(account.CanWithdraw(101), false);
-    }   
+    }
 }

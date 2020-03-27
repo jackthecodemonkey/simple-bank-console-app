@@ -37,18 +37,14 @@ impl BankServiceTrait for TextContext {
         }
     }
     fn AddAccount(&mut self, account: Account) -> &'static str {
-        let mut s: String = String::from("\r\n");
-        s.push_str(&account.no.to_string());
-        s.push_str(",");
-        s.push_str(&account.name.to_string());
-        s.push_str(",");
-        s.push_str(&account.deposit.to_string());
-        if let Err(e) = write!(self.openOptions, "{}", s.as_str()) {
+        let csv_account: String = account.Stringify();
+        if let Err(e) = write!(self.openOptions, "{}", csv_account.as_str()) {
             return "Failed to add a new account";
         }
         return "Account added successfully";
     }
     fn DeleteAccount(&mut self, account_no: u32) -> &'static str {
+        let allAccounts: Accounts = self.LoadData();
         "Not implemented yet"
     }
     fn Deposit(&mut self, account_no: u32, amount: i128) -> &'static str {
