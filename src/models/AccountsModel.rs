@@ -28,6 +28,16 @@ impl Accounts {
     pub fn AddAccount(&mut self, account: Account) {
         &self.accounts.push(account);
     }
+
+    pub fn DeleteAccount(&mut self, accountNo: u32) -> Result<(), &str> {
+        let len: usize = self.accounts.len();
+        let index = self.accounts.iter().position(|account| account.no == accountNo).unwrap();
+        self.accounts.remove(index);
+        if len != self.accounts.len() {
+            return Err("Failed to delete the account.")
+        }
+        return Ok(());
+    } 
 }
 
 #[cfg(test)]
