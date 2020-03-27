@@ -22,6 +22,7 @@ impl BankServiceTrait for TextContext {
         Accounts {
             accounts: contents
                 .split("\r\n")
+                .filter(|x| *x != "")
                 .map(|x| -> Account {
                     let sliced: Vec<&str> = x.split(",").collect();
                     if sliced.len() != 3 {
@@ -44,7 +45,10 @@ impl BankServiceTrait for TextContext {
         return "Account added successfully";
     }
     fn DeleteAccount(&mut self, account_no: u32) -> &'static str {
-        let allAccounts: Accounts = self.LoadData();
+        let mut allAccounts: Accounts = self.LoadData();
+        let _ = allAccounts.DeleteAccount(account_no).unwrap();
+        let remaining_accounts: String = String::from("");
+
         "Not implemented yet"
     }
     fn Deposit(&mut self, account_no: u32, amount: i128) -> &'static str {
