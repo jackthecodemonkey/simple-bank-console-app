@@ -29,7 +29,7 @@ impl Account {
         };
     }
 
-    pub fn Stringify(self) -> String {
+    pub fn Stringify(&self) -> String {
         let mut s: String = String::from("\r\n");
         s.push_str(&self.no.to_string());
         s.push_str(",");

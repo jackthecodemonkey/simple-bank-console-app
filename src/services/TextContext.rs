@@ -8,6 +8,7 @@ use super::super::traits::BankServiceTrait::BankServiceTrait;
 use std::fs::OpenOptions;
 use std::io::prelude::*;
 use std::str::FromStr;
+use std::io::SeekFrom;
 
 #[derive(Debug)]
 pub struct TextContext {
@@ -18,11 +19,12 @@ pub struct TextContext {
 impl BankServiceTrait for TextContext {
     fn LoadData(&mut self) -> Accounts {
         let mut contents = String::new();
+        self.dbContext.seek(SeekFrom::Start(0));
         self.dbContext.read_to_string(&mut contents);
         Accounts {
             accounts: contents
                 .split("\r\n")
-                .filter(|x| *x != "")
+                .filter(|&x| *&x != "")
                 .map(|x| -> Account {
                     let sliced: Vec<&str> = x.split(",").collect();
                     if sliced.len() != 3 {
@@ -47,7 +49,9 @@ impl BankServiceTrait for TextContext {
     fn DeleteAccount(&mut self, account_no: u32) -> &'static str {
         let mut allAccounts: Accounts = self.LoadData();
         let _ = allAccounts.DeleteAccount(account_no).unwrap();
-        let remaining_accounts: String = String::from("");
+        let remaining_accounts: String = allAccounts.Stringify();
+
+        println!("remaining_accounts {:?}", remaining_accounts);
 
         "Not implemented yet"
     }

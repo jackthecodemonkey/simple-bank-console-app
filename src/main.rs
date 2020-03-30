@@ -44,9 +44,6 @@ fn main() {
 
     textContext.DeleteAccount(8);
 
-
-    // println!("{:?}", textContext.LoadData());
-
     // let bankService: BankService<SQLContext> = BankService {
     //     dbContext: sqlContext,
     // };
