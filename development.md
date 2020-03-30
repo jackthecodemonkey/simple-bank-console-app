@@ -5,7 +5,7 @@
     3. Refactor the AddAccount : pull the logic for making string out of Account : Done
     4. Implement DeleteAccount, pass account no as a param, find from the file and remove it
        TODO: Continue coding for DeleteAccount.
-             1. loop through accounts, call stringify and concat
+             1. loop through accounts, call stringify and concat : DONE
              2. clean up txt file 
              3. and write new string
              
