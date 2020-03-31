@@ -9,6 +9,35 @@ use std::fs::OpenOptions;
 use std::io::prelude::*;
 use std::str::FromStr;
 use std::io::SeekFrom;
+use std::path::Path;
+
+pub fn text_context_factory(path: &str) -> TextContext {
+    let path = Path::new(path);
+    let display = path.display();
+
+    let mut file = match File::open(&path) {
+        Ok(file) => file,
+        Err(why) => panic!("couldn't open {}", display),
+    };
+
+    let openOptions = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .append(true)
+        .open(&path)
+        .unwrap();
+
+    TextContext {
+        dbContext: file,
+        openOptions: openOptions,
+    }
+}
+
+fn reset_file(path: &str) -> Result<(), &str> {
+    let path = Path::new(path);
+    let _ = File::create(&path);
+    Ok(())
+}
 
 #[derive(Debug)]
 pub struct TextContext {
@@ -50,8 +79,15 @@ impl BankServiceTrait for TextContext {
         let mut allAccounts: Accounts = self.LoadData();
         let _ = allAccounts.DeleteAccount(account_no).unwrap();
         let remaining_accounts: String = allAccounts.Stringify();
+        
+        let _ = reset_file("./src/dataSource/data.txt");
 
-        println!("remaining_accounts {:?}", remaining_accounts);
+        let newFileContext: TextContext = text_context_factory("./src/dataSource/data.txt");  
+
+        self.dbContext = newFileContext.dbContext;
+        self.openOptions = newFileContext.openOptions;
+
+        self.openOptions.write(remaining_accounts.as_bytes());
 
         "Not implemented yet"
     }

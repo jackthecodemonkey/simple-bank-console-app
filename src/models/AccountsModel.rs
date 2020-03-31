@@ -49,7 +49,6 @@ impl Accounts {
 
     pub fn Stringify(&self) -> String {
         let mut remaining_accounts: String = String::from("");
-        println!("{:?}",self.accounts.iter().len());
         for account in self.accounts.iter() {
             remaining_accounts.push_str(account.Stringify().as_str());
         }

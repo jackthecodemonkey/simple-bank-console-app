@@ -6,7 +6,8 @@
     4. Implement DeleteAccount, pass account no as a param, find from the file and remove it
        TODO: Continue coding for DeleteAccount.
              1. loop through accounts, call stringify and concat : DONE
-             2. clean up txt file 
+             2. clean up txt file : DONE
+                TODO:: refactor code of DeleteAccount a bit, write some unit testing
              3. and write new string
              
 * Add a mechanism to switch between file and db context ( factory pattern? )

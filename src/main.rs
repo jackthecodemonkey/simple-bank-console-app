@@ -1,6 +1,6 @@
 mod models;
-mod traits;
 mod services;
+mod traits;
 
 use models::AccountModel::Account;
 use models::AccountsModel::Accounts;
@@ -9,40 +9,25 @@ use models::TransferModel::Transfer;
 
 // use services::BankService::BankService;
 // use services::SQLContext::SQLContext;
-use services::TextContext::TextContext;
+use services::TextContext::*;
 use traits::BankServiceTrait::BankServiceTrait;
 
-use std::fs::OpenOptions;
-use std::fs::File;
-use std::path::Path;
-
 fn main() {
-    let path = Path::new("./src/dataSource/data.txt");
-    let display = path.display();
-
-    let mut file = match File::open(&path) {
-        Ok(file) => file,
-        Err(why) => panic!("couldn't open {}",display), 
-    };
-
-    let openOptions = OpenOptions::new().read(true).append(true).open(&path).unwrap();
-
-    let mut textContext: TextContext = TextContext {
-        dbContext: file,
-        openOptions: openOptions,
-    };
+    let mut textContext: TextContext = text_context_factory("./src/dataSource/data.txt");
 
     textContext.LoadData();
 
-    let acc: Account = Account {
-        no: 8,
-        name: String::from("VicVic"),
-        deposit: 8900,
-    };
+    // let acc: Account = Account {
+    //     no: 1,
+    //     name: String::from("VicVic"),
+    //     deposit: 8900,
+    // };
 
-    textContext.AddAccount(acc);
+    // textContext.AddAccount(acc);
 
-    textContext.DeleteAccount(8);
+    // textContext.AddAccount(acc);
+
+    textContext.DeleteAccount(2);
 
     // let bankService: BankService<SQLContext> = BankService {
     //     dbContext: sqlContext,
