@@ -10,26 +10,28 @@ use std::io::prelude::*;
 use std::str::FromStr;
 use std::io::SeekFrom;
 use std::path::Path;
+use std::io::Error;
 
-pub fn text_context_factory(path: &str) -> TextContext {
-    let path = Path::new(path);
-    let display = path.display();
+pub fn text_context_factory(path: &'static str) -> TextContext {
+    let file_path = Path::new(path);
+    let display = file_path.display();
 
-    let mut file = match File::open(&path) {
+    let file = match File::open(&file_path) {
         Ok(file) => file,
-        Err(why) => panic!("couldn't open {}", display),
+        Err(_) => panic!("couldn't open {}", display),
     };
 
     let openOptions = OpenOptions::new()
         .read(true)
         .write(true)
         .append(true)
-        .open(&path)
+        .open(&file_path)
         .unwrap();
 
     TextContext {
         dbContext: file,
         openOptions: openOptions,
+        path,
     }
 }
 
@@ -43,6 +45,7 @@ fn reset_file(path: &str) -> Result<(), &str> {
 pub struct TextContext {
     pub dbContext: File,
     pub openOptions: File,
+    pub path: &'static str,
 }
 
 impl BankServiceTrait for TextContext {
@@ -79,17 +82,16 @@ impl BankServiceTrait for TextContext {
         let mut allAccounts: Accounts = self.LoadData();
         let _ = allAccounts.DeleteAccount(account_no).unwrap();
         let remaining_accounts: String = allAccounts.Stringify();
-        
-        let _ = reset_file("./src/dataSource/data.txt");
+        let _ = reset_file(self.path);
 
-        let newFileContext: TextContext = text_context_factory("./src/dataSource/data.txt");  
+        let newFileContext: TextContext = text_context_factory(self.path);  
 
         self.dbContext = newFileContext.dbContext;
         self.openOptions = newFileContext.openOptions;
 
-        self.openOptions.write(remaining_accounts.as_bytes());
+        let _ = self.openOptions.write(remaining_accounts.as_bytes());
 
-        "Not implemented yet"
+        "Successfully deleted"
     }
     fn Deposit(&mut self, account_no: u32, amount: i128) -> &'static str {
         "Not implemented yet"

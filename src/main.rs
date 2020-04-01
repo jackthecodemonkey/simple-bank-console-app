@@ -17,13 +17,21 @@ fn main() {
 
     textContext.LoadData();
 
-    // let acc: Account = Account {
-    //     no: 1,
-    //     name: String::from("VicVic"),
-    //     deposit: 8900,
-    // };
+    let acc: Account = Account {
+        no: 2,
+        name: String::from("VicVic"),
+        deposit: 8900,
+    };
 
-    // textContext.AddAccount(acc);
+    textContext.AddAccount(acc);
+
+    let acc: Account = Account {
+        no: 3,
+        name: String::from("VicVic"),
+        deposit: 8900,
+    };
+
+    textContext.AddAccount(acc);
 
     // textContext.AddAccount(acc);
 
