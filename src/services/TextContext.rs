@@ -1,5 +1,6 @@
 use std::fs::File;
 
+use super::super::models::BankModel::Bank;
 use super::super::models::AccountModel::Account;
 use super::super::models::AccountsModel::Accounts;
 use super::super::models::TransferModel::Transfer;
@@ -12,7 +13,7 @@ use std::io::SeekFrom;
 use std::path::Path;
 use std::io::Error;
 
-pub fn text_context_factory(path: &'static str) -> TextContext {
+pub fn text_context_factory<'a,'b>(path: &'a str, bank: &'b mut Bank) -> TextContext<'a,'b> {
     let file_path = Path::new(path);
     let display = file_path.display();
 
@@ -29,26 +30,40 @@ pub fn text_context_factory(path: &'static str) -> TextContext {
         .unwrap();
 
     TextContext {
+        bank: bank,
         dbContext: file,
         openOptions: openOptions,
         path,
     }
 }
 
-fn reset_file(path: &str) -> Result<(), &str> {
-    let path = Path::new(path);
-    let _ = File::create(&path);
-    Ok(())
-}
-
 #[derive(Debug)]
-pub struct TextContext {
+pub struct TextContext<'a,'b> {
     pub dbContext: File,
     pub openOptions: File,
-    pub path: &'static str,
+    pub path: &'a str,
+    pub bank: &'b mut Bank,
 }
 
-impl BankServiceTrait for TextContext {
+impl TextContext<'_,'_> {
+    fn reset_file(&mut self) -> Result<(), &str> {
+        let path = Path::new(self.path);
+        let _ = File::create(&path);
+        Ok(())
+    }
+
+    fn rewrite_file(&mut self, accounts: Accounts) -> Result<(), &str> {
+        let remaining_accounts: String = accounts.Stringify();
+        let _ = self.reset_file();
+        let newFileContext: TextContext = text_context_factory(self.path, self.bank);  
+        self.dbContext = newFileContext.dbContext;
+        self.openOptions = newFileContext.openOptions;
+        let _ = self.openOptions.write(remaining_accounts.as_bytes());
+        Ok(())
+    }
+}
+
+impl <'a,'b>BankServiceTrait for TextContext<'a,'b> {
     fn LoadData(&mut self) -> Accounts {
         let mut contents = String::new();
         self.dbContext.seek(SeekFrom::Start(0));
@@ -81,19 +96,14 @@ impl BankServiceTrait for TextContext {
     fn DeleteAccount(&mut self, account_no: u32) -> &'static str {
         let mut allAccounts: Accounts = self.LoadData();
         let _ = allAccounts.DeleteAccount(account_no).unwrap();
-        let remaining_accounts: String = allAccounts.Stringify();
-        let _ = reset_file(self.path);
-
-        let newFileContext: TextContext = text_context_factory(self.path);  
-
-        self.dbContext = newFileContext.dbContext;
-        self.openOptions = newFileContext.openOptions;
-
-        let _ = self.openOptions.write(remaining_accounts.as_bytes());
+        let _ = self.rewrite_file(allAccounts);
 
         "Successfully deleted"
     }
     fn Deposit(&mut self, account_no: u32, amount: i128) -> &'static str {
+        let mut allAccounts: Accounts = self.LoadData();
+        // Accounts.De
+
         "Not implemented yet"
     }
     fn Withdraw(&mut self, account_no: u32, amount: i128) -> &'static str {
