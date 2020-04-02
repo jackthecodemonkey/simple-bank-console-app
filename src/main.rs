@@ -13,7 +13,7 @@ use services::TextContext::*;
 use traits::BankServiceTrait::BankServiceTrait;
 
 fn main() {
-    let mut textContext: TextContext = text_context_factory("./src/dataSource/data.txt");
+    let mut textContext = TextContext::new("./src/dataSource/data.txt");
 
     textContext.LoadData();
 

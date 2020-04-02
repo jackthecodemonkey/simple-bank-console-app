@@ -2,45 +2,45 @@ use std::fs::File;
 
 use super::super::models::AccountModel::Account;
 use super::super::models::AccountsModel::Accounts;
-use super::super::models::BankModel::Bank;
 use super::super::models::TransferModel::Transfer;
 use super::super::traits::BankServiceTrait::BankServiceTrait;
 
 use std::fs::OpenOptions;
 use std::io::prelude::*;
-use std::io::Error;
 use std::io::SeekFrom;
 use std::path::Path;
 use std::str::FromStr;
-
-pub fn text_context_factory<'a>(path: &'a str) -> TextContext<'a> {
-    let file_path = Path::new(path);
-    let display = file_path.display();
-
-    let file = match File::open(&file_path) {
-        Ok(file) => file,
-        Err(_) => panic!("couldn't open {}", display),
-    };
-
-    let openOptions = OpenOptions::new()
-        .read(true)
-        .write(true)
-        .append(true)
-        .open(&file_path)
-        .unwrap();
-
-    TextContext {
-        dbContext: file,
-        openOptions: openOptions,
-        path,
-    }
-}
 
 #[derive(Debug)]
 pub struct TextContext<'a> {
     pub dbContext: File,
     pub openOptions: File,
     pub path: &'a str,
+}
+
+impl TextContext<'_> {
+    pub fn new(path: &str) -> TextContext {
+        let file_path = Path::new(path);
+        let display = file_path.display();
+    
+        let file = match File::open(&file_path) {
+            Ok(file) => file,
+            Err(_) => panic!("couldn't open {}", display),
+        };
+    
+        let openOptions = OpenOptions::new()
+            .read(true)
+            .write(true)
+            .append(true)
+            .open(&file_path)
+            .unwrap();
+    
+        TextContext {
+            dbContext: file,
+            openOptions: openOptions,
+            path,
+        }
+    }
 }
 
 impl TextContext<'_> {
@@ -53,7 +53,7 @@ impl TextContext<'_> {
     fn rewrite_file(&mut self, accounts: &Accounts) -> Result<(), &str> {
         let remaining_accounts: String = accounts.Stringify();
         let _ = self.reset_file();
-        let newFileContext: TextContext = text_context_factory(self.path);
+        let newFileContext: TextContext = TextContext::new(self.path);
         self.dbContext = newFileContext.dbContext;
         self.openOptions = newFileContext.openOptions;
         let _ = self.openOptions.write(remaining_accounts.as_bytes());
