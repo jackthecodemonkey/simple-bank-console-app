@@ -27,7 +27,7 @@ fn main() {
 
     // textContext.DeleteAccount(17);
 
-    textContext.Deposit(2, 4000);
+    textContext.Deposit(6, 2000);
 
     // let bankService: BankService<SQLContext> = BankService {
     //     dbContext: sqlContext,
