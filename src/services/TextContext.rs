@@ -1,17 +1,17 @@
 use std::fs::File;
 
-use super::super::models::BankModel::Bank;
 use super::super::models::AccountModel::Account;
 use super::super::models::AccountsModel::Accounts;
+use super::super::models::BankModel::Bank;
 use super::super::models::TransferModel::Transfer;
 use super::super::traits::BankServiceTrait::BankServiceTrait;
 
 use std::fs::OpenOptions;
 use std::io::prelude::*;
-use std::str::FromStr;
+use std::io::Error;
 use std::io::SeekFrom;
 use std::path::Path;
-use std::io::Error;
+use std::str::FromStr;
 
 pub fn text_context_factory<'a>(path: &'a str) -> TextContext<'a> {
     let file_path = Path::new(path);
@@ -53,7 +53,7 @@ impl TextContext<'_> {
     fn rewrite_file(&mut self, accounts: &Accounts) -> Result<(), &str> {
         let remaining_accounts: String = accounts.Stringify();
         let _ = self.reset_file();
-        let newFileContext: TextContext = text_context_factory(self.path);  
+        let newFileContext: TextContext = text_context_factory(self.path);
         self.dbContext = newFileContext.dbContext;
         self.openOptions = newFileContext.openOptions;
         let _ = self.openOptions.write(remaining_accounts.as_bytes());
@@ -61,7 +61,7 @@ impl TextContext<'_> {
     }
 }
 
-impl <'a>BankServiceTrait for TextContext<'a> {
+impl<'a> BankServiceTrait for TextContext<'a> {
     fn LoadData(&mut self) -> Accounts {
         let mut contents = String::new();
         self.dbContext.seek(SeekFrom::Start(0));
@@ -107,9 +107,27 @@ impl <'a>BankServiceTrait for TextContext<'a> {
         return Err("Failed to deposit");
     }
     fn Withdraw(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
-        Err("Not implemented yet")
+        let mut allAccounts: Accounts = self.LoadData();
+        if let Ok(account) = allAccounts.FindByAccountNo(account_no) {
+            if account.CanWithdraw(amount) {
+                let _ = account.Withdraw(amount);
+                let _ = self.rewrite_file(&allAccounts);
+                return Ok(allAccounts);
+            }
+        }
+        return Err("Failed to withdraw");
     }
     fn Transfer(&mut self, transfer: Transfer) -> Result<Accounts, &str> {
+        let Transfer { from, to, amount } = transfer;
+        let mut allAccounts: Accounts = self.LoadData();
+        if allAccounts.HasAccount(from) && allAccounts.HasAccount(to) {
+            if let Ok(fromAccount) = allAccounts.FindByAccountNo(from) {
+                if (fromAccount.CanWithdraw(amount)) {
+                    let _ = self.Withdraw(from, amount);
+                    return self.Deposit(to, amount);
+                }
+            }
+        }
         Err("Not implemented yet")
     }
 }

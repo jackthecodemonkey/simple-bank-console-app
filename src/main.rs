@@ -27,7 +27,11 @@ fn main() {
 
     // textContext.DeleteAccount(17);
 
-    textContext.Deposit(6, 2000);
+    textContext.Transfer(Transfer {
+        from: 2,
+        to: 6,
+        amount: 50,
+    });
 
     // let bankService: BankService<SQLContext> = BankService {
     //     dbContext: sqlContext,
