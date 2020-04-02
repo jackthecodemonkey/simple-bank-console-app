@@ -14,8 +14,8 @@ impl<T> BankServiceTrait for BankService<T> {
             accounts: Vec::new()
         }
     }
-    fn AddAccount(&mut self, account: Account) -> &'static str {
-        "Not implemented yet"
+    fn AddAccount(&mut self, account: Account) -> Result<Account, &str> {
+        Err("Not implemented yet")
     }
     fn DeleteAccount(&mut self, account_no: u32) -> &'static str {
         "Not implemented yet"

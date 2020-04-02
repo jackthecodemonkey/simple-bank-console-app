@@ -84,12 +84,12 @@ impl <'a>BankServiceTrait for TextContext<'a> {
                 .collect(),
         }
     }
-    fn AddAccount(&mut self, account: Account) -> &'static str {
+    fn AddAccount(&mut self, account: Account) -> Result<Account, &str> {
         let csv_account: String = account.Stringify();
         if let Err(e) = write!(self.openOptions, "{}", csv_account.as_str()) {
-            return "Failed to add a new account";
+            return Err("Failed to add a new account");
         }
-        return "Account added successfully";
+        Ok(account)
     }
     fn DeleteAccount(&mut self, account_no: u32) -> &'static str {
         let mut allAccounts: Accounts = self.LoadData();
