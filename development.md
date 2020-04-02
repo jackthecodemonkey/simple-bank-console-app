@@ -10,7 +10,10 @@
                 TODO:: refactor code of DeleteAccount a bit, write some unit testing : DONE
              3. and write new string : DONE
 
-    5. Implement Deposit
+    5. Add Bank model to db context : DONE
+       update AddAccount and DeleteAccount to use Bank model business logic
+
+    6. Implement Deposit
        1. load data from file
        2. find the account
        3. deposit the amount

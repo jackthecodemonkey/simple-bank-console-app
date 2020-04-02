@@ -13,25 +13,19 @@ use services::TextContext::*;
 use traits::BankServiceTrait::BankServiceTrait;
 
 fn main() {
-    let mut bank = Bank {
-        accounts: Accounts {
-            accounts: vec![]
-        }
-    };
-
-    let mut textContext: TextContext = text_context_factory("./src/dataSource/data.txt", &mut bank);
+    let mut textContext: TextContext = text_context_factory("./src/dataSource/data.txt");
 
     textContext.LoadData();
 
     // let acc: Account = Account {
-    //     no: 7,
+    //     no: 17,
     //     name: String::from("VicVic"),
     //     deposit: 8900,
     // };
 
     // textContext.AddAccount(acc);
 
-    // textContext.DeleteAccount(5);
+    // textContext.DeleteAccount(17);
 
     textContext.Deposit(2, 4000);
 

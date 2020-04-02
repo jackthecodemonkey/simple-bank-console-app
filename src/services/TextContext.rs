@@ -13,7 +13,7 @@ use std::io::SeekFrom;
 use std::path::Path;
 use std::io::Error;
 
-pub fn text_context_factory<'a,'b>(path: &'a str, bank: &'b mut Bank) -> TextContext<'a,'b> {
+pub fn text_context_factory<'a>(path: &'a str) -> TextContext<'a> {
     let file_path = Path::new(path);
     let display = file_path.display();
 
@@ -30,7 +30,6 @@ pub fn text_context_factory<'a,'b>(path: &'a str, bank: &'b mut Bank) -> TextCon
         .unwrap();
 
     TextContext {
-        bank: bank,
         dbContext: file,
         openOptions: openOptions,
         path,
@@ -38,14 +37,13 @@ pub fn text_context_factory<'a,'b>(path: &'a str, bank: &'b mut Bank) -> TextCon
 }
 
 #[derive(Debug)]
-pub struct TextContext<'a,'b> {
+pub struct TextContext<'a> {
     pub dbContext: File,
     pub openOptions: File,
     pub path: &'a str,
-    pub bank: &'b mut Bank,
 }
 
-impl TextContext<'_,'_> {
+impl TextContext<'_> {
     fn reset_file(&mut self) -> Result<(), &str> {
         let path = Path::new(self.path);
         let _ = File::create(&path);
@@ -55,7 +53,7 @@ impl TextContext<'_,'_> {
     fn rewrite_file(&mut self, accounts: Accounts) -> Result<(), &str> {
         let remaining_accounts: String = accounts.Stringify();
         let _ = self.reset_file();
-        let newFileContext: TextContext = text_context_factory(self.path, self.bank);  
+        let newFileContext: TextContext = text_context_factory(self.path);  
         self.dbContext = newFileContext.dbContext;
         self.openOptions = newFileContext.openOptions;
         let _ = self.openOptions.write(remaining_accounts.as_bytes());
@@ -63,7 +61,7 @@ impl TextContext<'_,'_> {
     }
 }
 
-impl <'a,'b>BankServiceTrait for TextContext<'a,'b> {
+impl <'a>BankServiceTrait for TextContext<'a> {
     fn LoadData(&mut self) -> Accounts {
         let mut contents = String::new();
         self.dbContext.seek(SeekFrom::Start(0));
