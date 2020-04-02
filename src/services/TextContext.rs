@@ -95,19 +95,20 @@ impl <'a>BankServiceTrait for TextContext<'a> {
         let mut allAccounts: Accounts = self.LoadData();
         let _ = allAccounts.DeleteAccount(account_no).unwrap();
         let _ = self.rewrite_file(allAccounts);
-
         "Successfully deleted"
     }
-    fn Deposit(&mut self, account_no: u32, amount: i128) -> &'static str {
+    fn Deposit(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
         let mut allAccounts: Accounts = self.LoadData();
-        // Accounts.De
-
-        "Not implemented yet"
+        if let Ok(account) = allAccounts.FindByAccountNo(account_no) {
+            let _ = account.Deposit(amount);
+            return Ok(allAccounts);
+        }
+        return Err("Failed to deposit");
     }
-    fn Withdraw(&mut self, account_no: u32, amount: i128) -> &'static str {
-        "Not implemented yet"
+    fn Withdraw(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
+        Err("Not implemented yet")
     }
-    fn Transfer(&mut self, transfer: Transfer) -> &'static str {
-        "Not implemented yet"
+    fn Transfer(&mut self, transfer: Transfer) -> Result<Accounts, &str> {
+        Err("Not implemented yet")
     }
 }
