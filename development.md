@@ -11,14 +11,18 @@
              3. and write new string : DONE
 
     5. Add Bank model to db context : DONE
-       update AddAccount and DeleteAccount to use Bank model business logic
+       update AddAccount and DeleteAccount to use Bank model business logic : DONE
+      
+   * Think about how we combine controller & services & models alltogether
+     BankModel might be a redundant
+     Controller can get data from BankService and pass it to view thats all.
 
-    6. Implement Deposit
-       1. load data from file
-       2. find the account
-       3. deposit the amount
-       4. stringify the accounts
-       5. rewrite the file
+    6. Implement BankService
+       1. BankService will get a dbcontext service between TextContext and DbContext
+       2. This service will be injected to a controller to consume
+
+    7. Implement controller 
+       1. use bankservice for transactions
              
 * Add a mechanism to switch between file and db context ( factory pattern? )
  

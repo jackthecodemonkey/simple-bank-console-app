@@ -128,6 +128,6 @@ impl<'a> BankServiceTrait for TextContext<'a> {
                 }
             }
         }
-        Err("Not implemented yet")
+        Err("Failed to transfer")
     }
 }
