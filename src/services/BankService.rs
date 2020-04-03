@@ -16,25 +16,23 @@ impl<T> BankService<T> {
     }
 }
 
-impl<T> BankServiceTrait for BankService<T> {
+impl<T> BankServiceTrait for BankService<T> where T: BankServiceTrait {
     fn LoadData(&mut self) -> Accounts {
-        Accounts {
-            accounts: Vec::new()
-        }
+        self.dbContext.LoadData()
     }
     fn AddAccount(&mut self, account: Account) -> Result<Account, &str> {
-        Err("Not implemented yet")
+        self.dbContext.AddAccount(account)
     }
     fn DeleteAccount(&mut self, account_no: u32) -> &'static str {
-        "Not implemented yet"
+        self.dbContext.DeleteAccount(account_no)
     }
     fn Deposit(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
-        Err("Not implemented yet")
+        self.dbContext.Deposit(account_no,amount)
     }
     fn Withdraw(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
-        Err("Not implemented yet")
+        self.dbContext.Withdraw(account_no,amount)
     }
     fn Transfer(&mut self, transfer: Transfer) -> Result<Accounts, &str> {
-        Err("Not implemented yet")
+        self.dbContext.Transfer(transfer)
     }
 }

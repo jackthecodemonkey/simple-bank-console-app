@@ -26,7 +26,12 @@ fn main() {
         DB => BankService::new(TextContext::new("./src/dataSource/data.txt")),
     };
 
-    println!("{:?}",bankService.LoadData());
+    println!("{:?}", bankService.LoadData());
+
+    // let mut textContext = TextContext::new("./src/dataSource/data.txt");
+
+
+    // println!("{:?}",bankService.LoadData());
 
     // let acc: Account = Account {
     //     no: 17,
