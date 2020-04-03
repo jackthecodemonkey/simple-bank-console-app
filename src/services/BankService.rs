@@ -8,6 +8,14 @@ pub struct BankService<T> {
     pub dbContext: T,
 }
 
+impl<T> BankService<T> {
+    pub fn new(dbContext: T) -> BankService<T> {
+        BankService {
+            dbContext
+        }
+    }
+}
+
 impl<T> BankServiceTrait for BankService<T> {
     fn LoadData(&mut self) -> Accounts {
         Accounts {

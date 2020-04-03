@@ -7,15 +7,26 @@ use models::AccountsModel::Accounts;
 use models::BankModel::Bank;
 use models::TransferModel::Transfer;
 
-// use services::BankService::BankService;
+use services::BankService::BankService;
 // use services::SQLContext::SQLContext;
 use services::TextContext::*;
 use traits::BankServiceTrait::BankServiceTrait;
 
-fn main() {
-    let mut textContext = TextContext::new("./src/dataSource/data.txt");
+enum DBContext {
+    File,
+    DB,
+}
 
-    textContext.LoadData();
+fn main() {
+    // simulate as if user enter text file for dbcontext
+    let tempInputFromUser: DBContext = DBContext::File;
+
+    let mut bankService = match tempInputFromUser {
+        File => BankService::new(TextContext::new("./src/dataSource/data.txt")),
+        DB => BankService::new(TextContext::new("./src/dataSource/data.txt")),
+    };
+
+    println!("{:?}",bankService.LoadData());
 
     // let acc: Account = Account {
     //     no: 17,
@@ -27,11 +38,11 @@ fn main() {
 
     // textContext.DeleteAccount(17);
 
-    textContext.Transfer(Transfer {
-        from: 2,
-        to: 6,
-        amount: 50,
-    });
+    // textContext.Transfer(Transfer {
+    //     from: 2,
+    //     to: 6,
+    //     amount: 50,
+    // });
 
     // let bankService: BankService<SQLContext> = BankService {
     //     dbContext: sqlContext,
