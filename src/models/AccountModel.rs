@@ -1,36 +1,8 @@
-use super::super::TextContext;
-
 #[derive(Debug)]
 pub struct Account {
     pub no: u32,
     pub name: String,
     pub deposit: i128,
-}
-
-pub enum TransactionType {
-    Deposit(String),
-    Withdraw(String),
-    Transfer((String, String)),
-}
-
-impl TransactionType {
-    fn get_transction_content(&self, content: &str) -> &str {
-        match self {
-            TransactionType::Deposit(ref s) => "Deposit",
-            TransactionType::Withdraw(ref s) => "Withdraw",
-            TransactionType::Transfer(ref s) => "Transfer",
-        }
-    }
-}
-
-pub trait Transaction {
-    fn store_history(&mut self, type_of_transaction: &str, content: &str) -> &str;
-}
-
-impl Transaction for TextContext<'_> {
-    fn store_history(&mut self, type_of_transaction: &str, content: &str) -> &str {
-        "hello"
-    }
 }
 
 impl Account {

@@ -20,6 +20,8 @@
    TODO:: Implement a method to store all transaction history per account?
    Transactions: Deposit, Withdraw, Transfer
 
+      1. Update BankServiceTrait.rs and BankService.rs so that it gets another service(TransactionContext either file or db) and it calls "store_history" from methods of BankService
+
     6. Implement BankService 
        1. BankService will get a dbcontext service between TextContext and DbContext : DONE
        2. This service will be injected to a controller to consume

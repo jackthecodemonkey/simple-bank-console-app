@@ -6,11 +6,12 @@ use models::AccountModel::Account;
 use models::AccountsModel::Accounts;
 use models::BankModel::Bank;
 use models::TransferModel::Transfer;
-
+use models::TransactionType::TransactionType;
 use services::BankService::BankService;
 // use services::SQLContext::SQLContext;
-use services::TextContext::*;
+use services::TextContext::{ TextContext };
 use traits::BankServiceTrait::BankServiceTrait;
+use traits::Transaction::Transaction;
 
 enum DBContext {
     File,
@@ -26,7 +27,15 @@ fn main() {
         DB => BankService::new(TextContext::new("./src/dataSource/data.txt")),
     };
 
-    println!("{:?}", bankService.LoadData());
+    let mut a = TextContext::new("./src/dataSource/data.txt");
+
+    a.store_history(TransactionType::Deposit(String::from("Deposit")), "hello");
+
+    let deposit = TransactionType::Deposit(String::from("deposit"));
+
+    deposit.get_transction_content("Hello deposit");
+
+    // println!("{:?}", bankService.LoadData());
 
     // let mut textContext = TextContext::new("./src/dataSource/data.txt");
 
