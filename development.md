@@ -17,8 +17,11 @@
      BankModel might be a redundant
      Controller can get data from BankService and pass it to view thats all.
 
-    6. Implement BankService
-       1. BankService will get a dbcontext service between TextContext and DbContext
+   TODO:: Implement a method to store all transaction history per account?
+   Transactions: Deposit, Withdraw, Transfer
+
+    6. Implement BankService 
+       1. BankService will get a dbcontext service between TextContext and DbContext : DONE
        2. This service will be injected to a controller to consume
 
     7. Implement controller 
