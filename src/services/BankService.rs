@@ -2,21 +2,27 @@ use super::super::models::AccountModel::Account;
 use super::super::models::AccountsModel::Accounts;
 use super::super::models::TransferModel::Transfer;
 use super::super::traits::BankServiceTrait::BankServiceTrait;
+use super::super::traits::Transaction::Transaction;
 
 #[derive(Debug)]
-pub struct BankService<T> {
+pub struct BankService<T,M> {
     pub dbContext: T,
+    pub transactionContext: M,
 }
 
-impl<T> BankService<T> {
-    pub fn new(dbContext: T) -> BankService<T> {
+impl<T,M> BankService<T,M> {
+    pub fn new(dbContext: T, transactionContext: M) -> BankService<T,M> {
         BankService {
-            dbContext
+            dbContext,
+            transactionContext,
         }
     }
 }
 
-impl<T> BankServiceTrait for BankService<T> where T: BankServiceTrait {
+impl<T,M> BankServiceTrait for BankService<T,M> 
+where T: BankServiceTrait,
+      M: Transaction
+{
     fn LoadData(&mut self) -> Accounts {
         self.dbContext.LoadData()
     }
