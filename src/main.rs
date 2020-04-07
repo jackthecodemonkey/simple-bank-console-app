@@ -5,11 +5,11 @@ mod traits;
 use models::AccountModel::Account;
 use models::AccountsModel::Accounts;
 use models::BankModel::Bank;
-use models::TransferModel::Transfer;
 use models::TransactionType::TransactionType;
+use models::TransferModel::Transfer;
 use services::BankService::BankService;
 // use services::SQLContext::SQLContext;
-use services::TextContext::{ TextContext };
+use services::TextContext::TextContext;
 use traits::BankServiceTrait::BankServiceTrait;
 use traits::Transaction::Transaction;
 
@@ -22,9 +22,17 @@ fn main() {
     // simulate as if user enter text file for dbcontext
     let tempInputFromUser: DBContext = DBContext::File;
 
+    let mut transaction_context = TextContext::new("./src/dataSource/transaction.txt");
+
     let mut bankService = match tempInputFromUser {
-        File => BankService::new(TextContext::new("./src/dataSource/data.txt")),
-        DB => BankService::new(TextContext::new("./src/dataSource/data.txt")),
+        File => BankService::new(
+            TextContext::new("./src/dataSource/data.txt"),
+            transaction_context,
+        ),
+        DB => BankService::new(
+            TextContext::new("./src/dataSource/data.txt"),
+            transaction_context,
+        ),
     };
 
     let mut a = TextContext::new("./src/dataSource/data.txt");
@@ -38,7 +46,6 @@ fn main() {
     // println!("{:?}", bankService.LoadData());
 
     // let mut textContext = TextContext::new("./src/dataSource/data.txt");
-
 
     // println!("{:?}",bankService.LoadData());
 
