@@ -35,13 +35,15 @@ fn main() {
         ),
     };
 
-    let mut a = TextContext::new("./src/dataSource/data.txt");
+    bankService.Deposit(2,12300);
 
-    a.store_history(TransactionType::Deposit(String::from("Deposit")), "hello");
+    // let mut a = TextContext::new("./src/dataSource/data.txt");
 
-    let deposit = TransactionType::Deposit(String::from("deposit"));
+    // a.store_history(TransactionType::Deposit(String::from("Deposit")), "hello");
 
-    deposit.get_transction_content("Hello deposit");
+    // let deposit = TransactionType::Deposit(String::from("deposit"));
+
+    // deposit.get_transction_content("Hello deposit");
 
     // println!("{:?}", bankService.LoadData());
 

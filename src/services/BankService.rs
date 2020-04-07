@@ -36,16 +36,13 @@ where
     }
     fn Deposit(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
         match self.dbContext.Deposit(account_no, amount) {
-            Ok(account) => {
-                let stringify = &account.Stringify();
-                self.transactionContext
-                    .store_history(TransactionType::Deposit(String::from("Deposit")), stringify);
-                Ok(account)
+            Ok(mut accounts) => {
+                let account = accounts.FindByAccountNo(account_no)?;
+                self.transactionContext.log_history(TransactionType::Deposit, account.Stringify());
+                Ok(accounts)
             }
             Err(err) => Err(err),
         }
-
-        // self.dbContext.Deposit(account_no, amount)
     }
     fn Withdraw(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
         self.dbContext.Withdraw(account_no, amount)
