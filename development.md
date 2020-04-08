@@ -24,6 +24,9 @@
 
     6. Implement BankService 
        1. BankService will get a dbcontext service between TextContext and DbContext : DONE
+         TODO: 1. Refactor TextContext.rs, split into multiple files with smaller file sizes
+               2. Continue implementing transaction context
+
        2. This service will be injected to a controller to consume
 
     7. Implement controller 

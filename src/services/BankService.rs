@@ -4,26 +4,24 @@ use super::super::models::TransactionType::TransactionType;
 use super::super::models::TransferModel::Transfer;
 use super::super::traits::BankServiceTrait::BankServiceTrait;
 use super::super::traits::Transaction::Transaction;
+use super::super::services::TextContext::FileDBContext;
 
 #[derive(Debug)]
-pub struct BankService<T, M> {
+pub struct BankService<T> {
     pub dbContext: T,
-    pub transactionContext: M,
 }
 
-impl<T, M> BankService<T, M> {
-    pub fn new(dbContext: T, transactionContext: M) -> BankService<T, M> {
+impl<T> BankService<T> {
+    pub fn new(dbContext: T) -> BankService<T> {
         BankService {
             dbContext,
-            transactionContext,
         }
     }
 }
 
-impl<T, M> BankServiceTrait for BankService<T, M>
+impl<T> BankServiceTrait for BankService<T>
 where
     T: BankServiceTrait,
-    M: Transaction,
 {
     fn LoadData(&mut self) -> Accounts {
         self.dbContext.LoadData()
@@ -35,14 +33,7 @@ where
         self.dbContext.DeleteAccount(account_no)
     }
     fn Deposit(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
-        match self.dbContext.Deposit(account_no, amount) {
-            Ok(mut accounts) => {
-                let account = accounts.FindByAccountNo(account_no)?;
-                self.transactionContext.log_history(TransactionType::Deposit, account.Stringify());
-                Ok(accounts)
-            }
-            Err(err) => Err(err),
-        }
+        self.dbContext.Deposit(account_no, amount)
     }
     fn Withdraw(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
         self.dbContext.Withdraw(account_no, amount)
