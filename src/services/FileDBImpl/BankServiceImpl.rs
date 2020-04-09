@@ -1,7 +1,6 @@
 use super::super::super::models::AccountModel::Account;
 use super::super::super::models::AccountsModel::Accounts;
 use super::super::super::models::TransferModel::Transfer;
-use super::super::super::models::FileContext::FileContext;
 use super::super::super::traits::BankServiceTrait::BankServiceTrait;
 use super::super::super::traits::Transaction::Transaction;
 use super::super::super::models::TransactionType::TransactionType;

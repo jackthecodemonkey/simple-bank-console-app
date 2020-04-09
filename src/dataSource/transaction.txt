@@ -1,0 +1,6 @@
+
+2,VicVic,331150, type: deposit ,date: 2020-04-09T21:21:20.984053300+10:00
+2,VicVic,343450, type: deposit ,date: 2020-04-09T21:21:27.943823100+10:00
+2,VicVic,355750, type: deposit ,date: 2020-04-09T21:21:30.665760500+10:00
+2,VicVic,368050, type: deposit ,date: 2020-04-09T21:21:32.721790700+10:00
+2,VicVic,380350, type: deposit ,date: 2020-04-09T21:21:34.654608200+10:00
