@@ -9,8 +9,8 @@ use models::TransactionType::TransactionType;
 use models::TransferModel::Transfer;
 use services::BankService::BankService;
 // use services::SQLContext::SQLContext;
-use services::TextContext::TextContext;
-use services::TextContext::FileDBContext;
+use models::FileContext::FileContext;
+use services::FileDBContext::FileDBContext;
 use traits::BankServiceTrait::BankServiceTrait;
 use traits::Transaction::Transaction;
 
@@ -26,8 +26,8 @@ fn main() {
     let mut bankService = match tempInputFromUser {
         File => BankService::new(
             FileDBContext {
-                context: TextContext::new("./src/dataSource/data.txt"),
-                transaction_context: TextContext::new("./src/dataSource/transaction.txt")
+                context: FileContext::new("./src/dataSource/data.txt"),
+                transaction_context: FileContext::new("./src/dataSource/transaction.txt")
             }
         )
         // File => BankService::new(

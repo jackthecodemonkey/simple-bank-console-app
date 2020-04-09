@@ -4,7 +4,7 @@ use super::super::models::TransactionType::TransactionType;
 use super::super::models::TransferModel::Transfer;
 use super::super::traits::BankServiceTrait::BankServiceTrait;
 use super::super::traits::Transaction::Transaction;
-use super::super::services::TextContext::FileDBContext;
+use super::super::services::FileDBContext::FileDBContext;
 
 #[derive(Debug)]
 pub struct BankService<T> {

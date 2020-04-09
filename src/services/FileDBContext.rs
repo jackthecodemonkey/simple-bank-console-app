@@ -3,12 +3,11 @@ use std::fs::File;
 use super::super::models::AccountModel::Account;
 use super::super::models::AccountsModel::Accounts;
 use super::super::models::TransferModel::Transfer;
+use super::super::models::FileContext::FileContext;
 use super::super::traits::BankServiceTrait::BankServiceTrait;
 use super::super::traits::Transaction::Transaction;
 use super::super::models::TransactionType::TransactionType;
 
-
-use std::fs::OpenOptions;
 use std::io::prelude::*;
 use std::io::SeekFrom;
 use std::path::Path;
@@ -16,37 +15,8 @@ use std::str::FromStr;
 
 #[derive(Debug)]
 pub struct FileDBContext<'a, 'b> {
-    pub context: TextContext<'a>,
-    pub transaction_context: TextContext<'b>,
-}
-
-#[derive(Debug)]
-pub struct TextContext<'a> {
-    pub dbContext: File,
-    pub openOptions: File,
-    pub path: &'a str,
-}
-
-impl TextContext<'_> {
-    pub fn new(path: &str) -> TextContext {
-        let file_path = Path::new(path);
-        let display = file_path.display();
-        let file = match File::open(&file_path) {
-            Ok(file) => file,
-            Err(_) => panic!("couldn't open {}", display),
-        };
-        let openOptions = OpenOptions::new()
-            .read(true)
-            .write(true)
-            .append(true)
-            .open(&file_path)
-            .unwrap();
-        TextContext {
-            dbContext: file,
-            openOptions: openOptions,
-            path,
-        }
-    }
+    pub context: FileContext<'a>,
+    pub transaction_context: FileContext<'b>,
 }
 
 impl<'a, 'b> Transaction for FileDBContext<'a, 'b> {
@@ -67,7 +37,7 @@ impl<'a, 'b> FileDBContext<'a, 'b> {
     fn rewrite_file(&mut self, accounts: &Accounts) -> Result<(), &str> {
         let remaining_accounts: String = accounts.Stringify();
         let _ = self.reset_file();
-        let newFileContext: TextContext = TextContext::new(self.context.path);
+        let newFileContext: FileContext = FileContext::new(self.context.path);
         self.context.dbContext = newFileContext.dbContext;
         self.context.openOptions = newFileContext.openOptions;
         let _ = self
@@ -140,7 +110,7 @@ impl<'a, 'b> BankServiceTrait for FileDBContext<'a, 'b> {
         let mut allAccounts: Accounts = self.LoadData();
         if allAccounts.HasAccount(from) && allAccounts.HasAccount(to) {
             if let Ok(fromAccount) = allAccounts.FindByAccountNo(from) {
-                if (fromAccount.CanWithdraw(amount)) {
+                if fromAccount.CanWithdraw(amount) {
                     let _ = self.Withdraw(from, amount);
                     return self.Deposit(to, amount);
                 }
