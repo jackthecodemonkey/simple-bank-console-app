@@ -24,11 +24,19 @@
 
     6. Implement BankService 
        1. BankService will get a dbcontext service between TextContext and DbContext : DONE
-         TODO: 1. Refactor TextContext.rs, split into multiple files with smaller file sizes : DONE
+               1. Refactor TextContext.rs, split into multiple files with smaller file sizes : DONE
                
-               2. Continue implementing transaction context
+               2. Continue implementing transaction context : DONE
 
        2. This service will be injected to a controller to consume
+         TODO:: 
+         1. continue working in main.rs file
+            think about handling multiple command like args 
+            like passing all of the Vec<String> to some struct
+            and create a trait to handle each argument
+            return services ?
+         2. create view section to show menus to users
+         3. think how to glue view , user interactions and controller with injected services 
 
     7. Implement controller 
        1. use bankservice for transactions

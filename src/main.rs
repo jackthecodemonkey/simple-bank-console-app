@@ -2,6 +2,7 @@ mod models;
 mod services;
 mod traits;
 
+use std::env;
 use models::AccountModel::Account;
 use models::AccountsModel::Accounts;
 use models::BankModel::Bank;
@@ -20,6 +21,11 @@ enum DBContext {
 }
 
 fn main() {
+
+    let args: Vec<String> = env::args().collect();
+
+    println!("{:?}", args);
+
     // simulate as if user enter text file for dbcontext
     let tempInputFromUser: DBContext = DBContext::File;
 
