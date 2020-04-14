@@ -61,6 +61,7 @@ impl<'a, 'b> BankServiceTrait for FileDBContext<'a, 'b> {
         let mut allAccounts: Accounts = self.LoadData();
         if let Ok(account) = allAccounts.FindByAccountNo(account_no) {
             if account.CanWithdraw(amount) {
+                self.log_history(TransactionType::Withdraw, account.Stringify());
                 let _ = account.Withdraw(amount);
                 let _ = self.rewrite_file(&allAccounts);
                 return Ok(allAccounts);
@@ -74,6 +75,7 @@ impl<'a, 'b> BankServiceTrait for FileDBContext<'a, 'b> {
         if allAccounts.HasAccount(from) && allAccounts.HasAccount(to) {
             if let Ok(fromAccount) = allAccounts.FindByAccountNo(from) {
                 if fromAccount.CanWithdraw(amount) {
+                    self.log_history(TransactionType::Transfer, String::from("\r\n"));
                     let _ = self.Withdraw(from, amount);
                     return self.Deposit(to, amount);
                 }

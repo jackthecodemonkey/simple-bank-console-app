@@ -1,5 +1,5 @@
 
-1,VicVic,8900
-2,VicVic,380350
+1,VicVic,12790
+2,VicVic,437960
 6,VicVic,10450
 7,VicVic,7900

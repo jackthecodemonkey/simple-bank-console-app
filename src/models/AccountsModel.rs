@@ -54,6 +54,15 @@ impl Accounts {
         }
         remaining_accounts
     }
+
+    pub fn StringifyByAccountNo(&mut self, accountNo: u32) -> Result<String, &str> {
+        if self.HasAccount(accountNo) {
+            if let Ok(account) = self.FindByAccountNo(accountNo) {
+                return Ok(account.Stringify())
+            }
+        }
+        Err("Account not found")
+    }
 }
 
 #[cfg(test)]

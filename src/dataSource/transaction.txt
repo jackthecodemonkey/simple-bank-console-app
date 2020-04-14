@@ -4,3 +4,30 @@
 2,VicVic,355750, type: deposit ,date: 2020-04-09T21:21:30.665760500+10:00
 2,VicVic,368050, type: deposit ,date: 2020-04-09T21:21:32.721790700+10:00
 2,VicVic,380350, type: deposit ,date: 2020-04-09T21:21:34.654608200+10:00
+2,VicVic,392650, type: deposit ,date: 2020-04-09T21:35:49.003669900+10:00
+2,VicVic,404950, type: deposit ,date: 2020-04-09T21:35:52.820750800+10:00
+2,VicVic,417250, type: deposit ,date: 2020-04-14T21:19:25.138718700+10:00
+2,VicVic,429550, type: deposit ,date: 2020-04-14T21:20:50.341024800+10:00
+1,VicVic,8900, type: withdraw ,date: 2020-04-14T21:28:00.171414300+10:00Transfer from
+1,VicVic,8900
+2,VicVic,429550, type: transfer ,date: 2020-04-14T21:28:00.174414400+10:00
+2,VicVic,430950, type: deposit ,date: 2020-04-14T21:28:00.174414400+10:00
+1,VicVic,7500, type: withdraw ,date: 2020-04-14T21:28:12.682861600+10:00Transfer from
+1,VicVic,7500
+2,VicVic,430950, type: transfer ,date: 2020-04-14T21:28:12.684863100+10:00
+2,VicVic,432350, type: deposit ,date: 2020-04-14T21:28:12.684863100+10:00
+Transfer: , type: transfer ,date: 2020-04-14T21:30:14.786374800+10:00
+1,VicVic,6100, type: withdraw ,date: 2020-04-14T21:30:14.787371800+10:00
+2,VicVic,433750, type: deposit ,date: 2020-04-14T21:30:14.788371800+10:00
+Transfer: , type: transfer ,date: 2020-04-14T21:30:31.826319300+10:00
+1,VicVic,4700, type: withdraw ,date: 2020-04-14T21:30:31.827317800+10:00
+2,VicVic,435150, type: deposit ,date: 2020-04-14T21:30:31.828317700+10:00, type: transfer ,date: 2020-04-14T21:30:43.130597+10:00
+1,VicVic,3300, type: withdraw ,date: 2020-04-14T21:30:43.132618400+10:00
+2,VicVic,436550, type: deposit ,date: 2020-04-14T21:30:43.133619800+10:00
+, type: transfer ,date: 2020-04-14T21:30:57.821245100+10:00
+1,VicVic,1900, type: withdraw ,date: 2020-04-14T21:30:57.822240600+10:00
+2,VicVic,437950, type: deposit ,date: 2020-04-14T21:30:57.823241600+10:00
+type: transfer ,date: 2020-04-14T21:35:14.668475400+10:00
+1,VicVic,500, type: withdraw ,date: 2020-04-14T21:35:14.670473500+10:00
+2,VicVic,437960, type: deposit ,date: 2020-04-14T21:35:14.670473500+10:00
+1,VicVic,12790, type: deposit ,date: 2020-04-14T21:35:33.372703200+10:00

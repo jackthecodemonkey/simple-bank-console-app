@@ -40,7 +40,13 @@ fn main() {
         // ),
     };
 
-    bankService.Deposit(2,12300);
+    // bankService.Transfer(Transfer {
+    //     from: 1,
+    //     to: 2,
+    //     amount: 10,
+    // });
+
+    bankService.Deposit(1,12300);
 
     // let mut a = TextContext::new("./src/dataSource/data.txt");
 
