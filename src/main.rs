@@ -2,13 +2,13 @@ mod models;
 mod services;
 mod traits;
 
-use std::env;
 use models::AccountModel::Account;
 use models::AccountsModel::Accounts;
 use models::BankModel::Bank;
 use models::TransactionType::TransactionType;
 use models::TransferModel::Transfer;
 use services::BankService::BankService;
+use std::env;
 // use services::SQLContext::SQLContext;
 use models::FileContext::FileContext;
 use services::FileDBContext::FileDBContext;
@@ -20,87 +20,66 @@ enum DBContext {
     DB,
 }
 
+trait ValidateCommands {
+    fn validate(&self, valid_commands: &ValidCommands) -> Result<(), String>;
+}
+
+#[derive(Debug)]
+struct ValidCommands {
+    valid_commands: Vec<String>,
+}
+
+#[derive(Debug)]
+struct Commands {
+    arguments: Vec<String>,
+}
+
+impl Commands {
+    fn new(commands: Vec<String>) -> Self {
+        Commands {
+            arguments: commands,
+        }
+    }
+}
+
+impl ValidateCommands for Commands {
+    fn validate(&self, valid_commands: &ValidCommands) -> Result<(), String> {
+        let mut invalid_commands: String = String::from("");
+        for argument in self.arguments.iter() {
+            if !valid_commands.valid_commands.contains(argument) {
+                invalid_commands.push_str("invalid command entered: ");
+                invalid_commands.push_str(&argument.as_str());
+                invalid_commands.push_str("\n");
+            }
+        }
+        if invalid_commands != "" {
+            return Err(invalid_commands);
+        }
+        Ok(())
+    }
+}
+
 fn main() {
+    let arguments: Commands = Commands::new(env::args().collect());
 
-    let args: Vec<String> = env::args().collect();
+    println!("{:?}", arguments);
 
-    println!("{:?}", args);
+    let valid_commands = ValidCommands {
+        valid_commands: vec![String::from("use-file"), String::from("use-db")],
+    };
+
+    if let Err(e) = arguments.validate(&valid_commands) {
+        println!("{}", e);
+    }
 
     // simulate as if user enter text file for dbcontext
     let tempInputFromUser: DBContext = DBContext::File;
 
     let mut bankService = match tempInputFromUser {
-        File => BankService::new(
-            FileDBContext {
-                context: FileContext::new("./src/dataSource/data.txt"),
-                transaction_context: FileContext::new("./src/dataSource/transaction.txt")
-            }
-        )
-        // File => BankService::new(
-        //     TextContext::new("./src/dataSource/data.txt"),
-        //     transaction_context,
-        // ),
-        // DB => BankService::new(
-        //     TextContext::new("./src/dataSource/data.txt"),
-        //     transaction_context,
-        // ),
+        File => BankService::new(FileDBContext {
+            context: FileContext::new("./src/dataSource/data.txt"),
+            transaction_context: FileContext::new("./src/dataSource/transaction.txt"),
+        }),
     };
-
-    // bankService.Transfer(Transfer {
-    //     from: 1,
-    //     to: 2,
-    //     amount: 10,
-    // });
-
-    bankService.Deposit(1,12300);
-
-    // let mut a = TextContext::new("./src/dataSource/data.txt");
-
-    // a.store_history(TransactionType::Deposit(String::from("Deposit")), "hello");
-
-    // let deposit = TransactionType::Deposit(String::from("deposit"));
-
-    // deposit.get_transction_content("Hello deposit");
-
-    // println!("{:?}", bankService.LoadData());
-
-    // let mut textContext = TextContext::new("./src/dataSource/data.txt");
-
-    // println!("{:?}",bankService.LoadData());
-
-    // let acc: Account = Account {
-    //     no: 17,
-    //     name: String::from("VicVic"),
-    //     deposit: 8900,
-    // };
-
-    // textContext.AddAccount(acc);
-
-    // textContext.DeleteAccount(17);
-
-    // textContext.Transfer(Transfer {
-    //     from: 2,
-    //     to: 6,
-    //     amount: 50,
-    // });
-
-    // let bankService: BankService<SQLContext> = BankService {
-    //     dbContext: sqlContext,
-    // };
-
-    // println!("{:?}", bankService);
-
-    // let account = Account::new(1534556, String::from("Jack"), 1000);
-    // let account2 = Account::new(4534556, String::from("Seiko"), 5000);
-
-    // let accounts = Accounts { accounts: vec![] };
-
-    // let mut bank = Bank::new(accounts);
-
-    // bank.AddAccount(account);
-    // bank.AddAccount(account2);
-
-    // bank.Delete_account(151234556);
-
-    // println!("{:?}", bank);
+    bankService.Deposit(1, 12300);
 }
