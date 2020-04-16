@@ -15,11 +15,6 @@ use services::FileDBContext::FileDBContext;
 use traits::BankServiceTrait::BankServiceTrait;
 use traits::Transaction::Transaction;
 
-enum DBContext {
-    File,
-    DB,
-}
-
 trait ValidateCommands {
     fn validate(&self, valid_commands: &ValidCommands) -> Result<(), String>;
 }
@@ -60,9 +55,7 @@ impl ValidateCommands for Commands {
 }
 
 fn main() {
-    let arguments: Commands = Commands::new(env::args().collect());
-
-    println!("{:?}", arguments);
+    let arguments: Commands = Commands::new(env::args().skip(1).collect());
 
     let valid_commands = ValidCommands {
         valid_commands: vec![String::from("use-file"), String::from("use-db")],
@@ -70,13 +63,14 @@ fn main() {
 
     if let Err(e) = arguments.validate(&valid_commands) {
         println!("{}", e);
+        panic!("Failed to parse command line arguments")
     }
 
-    // simulate as if user enter text file for dbcontext
-    let tempInputFromUser: DBContext = DBContext::File;
-
-    let mut bankService = match tempInputFromUser {
-        File => BankService::new(FileDBContext {
+    let db_context_type = &arguments.arguments[0];
+    let file_type:String = String::from("use-file");
+    let db_type:String = String::from("use-db");
+    let mut bankService = match db_context_type {
+        file_type => BankService::new(FileDBContext {
             context: FileContext::new("./src/dataSource/data.txt"),
             transaction_context: FileContext::new("./src/dataSource/transaction.txt"),
         }),
