@@ -30,13 +30,10 @@
 
        2. This service will be injected to a controller to consume
          TODO:: 
-         1. continue working in main.rs file
-            think about handling multiple command like args 
-            like passing all of the Vec<String> to some struct
-            and create a trait to handle each argument
-            return services ?
-         2. create view section to show menus to users
-         3. think how to glue view , user interactions and controller with injected services 
+         1. show menu in loop 
+         so that user keep using other transactions : DONE
+
+         2. continue implementing each number using match block
 
     7. Implement controller 
        1. use bankservice for transactions

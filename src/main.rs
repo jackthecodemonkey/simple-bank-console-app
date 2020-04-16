@@ -15,6 +15,8 @@ use services::FileDBContext::FileDBContext;
 use traits::BankServiceTrait::BankServiceTrait;
 use traits::Transaction::Transaction;
 
+use std::io::{self, Read};
+
 trait ValidateCommands {
     fn validate(&self, valid_commands: &ValidCommands) -> Result<(), String>;
 }
@@ -54,6 +56,14 @@ impl ValidateCommands for Commands {
     }
 }
 
+fn read_input_from_user() -> String {
+    let mut input_text = String::new();
+    io::stdin()
+        .read_line(&mut input_text)
+        .expect("failed to read from stdin");
+    input_text
+}
+
 fn main() {
     // Initialize bank service
 
@@ -76,22 +86,22 @@ fn main() {
     //         transaction_context: FileContext::new("./src/dataSource/transaction.txt"),
     //     }),
     // };
-    
-    // Ready to use bankservice 
 
-    // Show menu to user
-    // 1. Add Account
-    // 2. Delete Account
-    // 3. Deposit
-    // 4. Withdraw
-    // 5. Transfer
-    // 6. Exit
-
-    println!("****Choose transaction****");
-    println!("1. Add Account");
-    println!("2. Delete Account");
-    println!("3. Deposit");
-    println!("4. Withdraw");
-    println!("5. Transfer");
-    println!("6. Exit");
+    // Ready to use bankservice
+    loop {
+        println!("****Select transaction****");
+        println!("1. Add Account");
+        println!("2. Delete Account");
+        println!("3. Deposit");
+        println!("4. Withdraw");
+        println!("5. Transfer");
+        println!("6. Exit");
+        println!("****Enter a number****");
+        let input_text = read_input_from_user();
+        let trimmed = input_text.trim();
+        match trimmed.parse::<u32>() {
+            Ok(i) => println!("your entered: {}", i),
+            Err(..) => println!("invalid transaction selected {}", trimmed),
+        };
+    }
 }
