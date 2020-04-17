@@ -105,7 +105,13 @@ fn main() {
                         println!("{:?}", account);
                     }
                 }
-                2 => {}
+                2 => {
+                    println!("enter account details with comma seprated values eg: account number, account name, deposit");
+                    let account_str = read_input_from_user();
+                    let trimed = account_str.trim();
+                    let account: Vec<&str> = trimed.split(",").collect();
+                    println!("{:?}", account);
+                }
                 3 => {}
                 4 => {}
                 5 => {}
@@ -123,17 +129,14 @@ fn main() {
             println!("Continue other transactions? y/n");
             let next_transaction = read_input_from_user();
             let trimmed_next_transaction = next_transaction.trim();
-    
             match trimmed_next_transaction {
                 "y" => {
                     break 'inner;
-                },
+                }
                 "n" => {
                     break 'outer;
-                },
-                _ => {
-                    println!("invalid command typed {}", trimmed_next_transaction)
                 }
+                _ => println!("invalid command typed {}", trimmed_next_transaction),
             }
         }
     }
