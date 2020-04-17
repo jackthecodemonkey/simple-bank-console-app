@@ -65,43 +65,76 @@ fn read_input_from_user() -> String {
 }
 
 fn main() {
-    // Initialize bank service
+    let arguments: Commands = Commands::new(env::args().skip(1).collect());
+    let valid_commands = ValidCommands {
+        valid_commands: vec![String::from("use-file"), String::from("use-db")],
+    };
 
-    // let arguments: Commands = Commands::new(env::args().skip(1).collect());
-    // let valid_commands = ValidCommands {
-    //     valid_commands: vec![String::from("use-file"), String::from("use-db")],
-    // };
+    if let Err(e) = arguments.validate(&valid_commands) {
+        println!("{}", e);
+        panic!("Failed to parse command line arguments")
+    }
 
-    // if let Err(e) = arguments.validate(&valid_commands) {
-    //     println!("{}", e);
-    //     panic!("Failed to parse command line arguments")
-    // }
+    let db_context_type = &arguments.arguments[0];
+    let file_type: String = String::from("use-file");
+    let db_type: String = String::from("use-db");
+    let mut bankService = match db_context_type {
+        file_type => BankService::new(FileDBContext {
+            context: FileContext::new("./src/dataSource/data.txt"),
+            transaction_context: FileContext::new("./src/dataSource/transaction.txt"),
+        }),
+    };
 
-    // let db_context_type = &arguments.arguments[0];
-    // let file_type:String = String::from("use-file");
-    // let db_type:String = String::from("use-db");
-    // let mut bankService = match db_context_type {
-    //     file_type => BankService::new(FileDBContext {
-    //         context: FileContext::new("./src/dataSource/data.txt"),
-    //         transaction_context: FileContext::new("./src/dataSource/transaction.txt"),
-    //     }),
-    // };
-
-    // Ready to use bankservice
-    loop {
+    'outer: loop {
         println!("****Select transaction****");
-        println!("1. Add Account");
-        println!("2. Delete Account");
-        println!("3. Deposit");
-        println!("4. Withdraw");
-        println!("5. Transfer");
-        println!("6. Exit");
+        println!("1. View All Accounts");
+        println!("2. Add Account");
+        println!("3. Delete Account");
+        println!("4. Deposit");
+        println!("5. Withdraw");
+        println!("6. Transfer");
+        println!("7. Exit");
         println!("****Enter a number****");
         let input_text = read_input_from_user();
         let trimmed = input_text.trim();
         match trimmed.parse::<u32>() {
-            Ok(i) => println!("your entered: {}", i),
-            Err(..) => println!("invalid transaction selected {}", trimmed),
+            Ok(i) => match i {
+                1 => {
+                    let accounts = bankService.LoadData();
+                    for account in accounts.accounts.iter() {
+                        println!("{:?}", account);
+                    }
+                }
+                2 => {}
+                3 => {}
+                4 => {}
+                5 => {}
+                6 => {}
+                7 => {}
+                _ => {
+                    println!("invalid transaction entered {}", i);
+                    continue 'outer;
+                }
+            },
+            Err(..) => println!("invalid command typed {}", trimmed),
         };
+
+        'inner: loop {
+            println!("Continue other transactions? y/n");
+            let next_transaction = read_input_from_user();
+            let trimmed_next_transaction = next_transaction.trim();
+    
+            match trimmed_next_transaction {
+                "y" => {
+                    break 'inner;
+                },
+                "n" => {
+                    break 'outer;
+                },
+                _ => {
+                    println!("invalid command typed {}", trimmed_next_transaction)
+                }
+            }
+        }
     }
 }
