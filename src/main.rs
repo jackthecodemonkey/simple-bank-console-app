@@ -58,21 +58,24 @@ impl ValidateCommands for Commands {
 use std::str::FromStr;
 fn validate_arguments(user_arguments: &str, expected: Vec<&str>) -> Result<(), String> {
     let arguments: Vec<&str> = user_arguments.split(",").collect();
+    if arguments.len() != expected.len() {
+        return Err("Error: please try again.".to_string());
+    }
     let mut invalid_arguments = "".to_string();
     for i in 0..expected.len() {
         let current: &str = arguments[i];
         match expected[i] {
             "u32" => {
                 if let Err(_) = <u32 as FromStr>::from_str(current) {
-                    invalid_arguments.push_str("Invalid account number given.\r\n");
+                    invalid_arguments.push_str("Error: Invalid account number given.");
                 }
-            },
+            }
             "i128" => {
                 if let Err(_) = <i128 as FromStr>::from_str(current) {
-                    invalid_arguments.push_str("Invalid deposit amount given.\r\n");
+                    invalid_arguments.push_str(".\r\nError: Invalid deposit amount given.");
                 }
-            },
-            _ => {} 
+            }
+            _ => {}
         }
     }
     if invalid_arguments != "".to_string() {
@@ -87,6 +90,22 @@ fn read_input_from_user() -> String {
         .read_line(&mut input_text)
         .expect("failed to read from stdin");
     input_text
+}
+
+fn handle_add_account() -> Result<String, ()> {
+    println!("enter account details with comma seprated values eg: account number, account name, deposit");
+    let account_str = read_input_from_user();
+    let trimed = account_str.trim();
+    match validate_arguments(trimed, vec!["u32", "string", "i128"]) {
+        Err(e) => {
+            println!("{}", e);
+            println!("pleae try again");
+            return Err(())
+        }
+        _ => {
+            return Ok(String::from(trimed))
+        }
+    }
 }
 
 fn main() {
@@ -131,11 +150,15 @@ fn main() {
                     }
                 }
                 2 => {
-                    println!("enter account details with comma seprated values eg: account number, account name, deposit");
-                    let account_str = read_input_from_user();
-                    let trimed = account_str.trim();
-                    let account: Vec<&str> = trimed.split(",").collect();
-                    println!("{:?}", account);
+                    'add_account: loop {
+                        match handle_add_account() {
+                            Ok(account_details) => {
+                                println!("{}", account_details);
+                                break 'add_account;
+                            },
+                            _ => {}  
+                        }
+                    }
                 }
                 3 => {}
                 4 => {}
