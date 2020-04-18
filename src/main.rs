@@ -55,6 +55,31 @@ impl ValidateCommands for Commands {
         Ok(())
     }
 }
+use std::str::FromStr;
+fn validate_arguments(user_arguments: &str, expected: Vec<&str>) -> Result<(), String> {
+    let arguments: Vec<&str> = user_arguments.split(",").collect();
+    let mut invalid_arguments = "".to_string();
+    for i in 0..expected.len() {
+        let current: &str = arguments[i];
+        match expected[i] {
+            "u32" => {
+                if let Err(_) = <u32 as FromStr>::from_str(current) {
+                    invalid_arguments.push_str("Invalid account number given.\r\n");
+                }
+            },
+            "i128" => {
+                if let Err(_) = <i128 as FromStr>::from_str(current) {
+                    invalid_arguments.push_str("Invalid deposit amount given.\r\n");
+                }
+            },
+            _ => {} 
+        }
+    }
+    if invalid_arguments != "".to_string() {
+        return Err(invalid_arguments);
+    }
+    Ok(())
+}
 
 fn read_input_from_user() -> String {
     let mut input_text = String::new();
