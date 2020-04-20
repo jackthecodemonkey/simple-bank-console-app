@@ -171,7 +171,7 @@ fn main() {
                 3 => 'delete_account: loop {
                     match get_account_details_from_user(
                         "enter account number to be deleted from system",
-                        vec!["u32"]
+                        vec!["u32"],
                     ) {
                         Ok(account_no) => {
                             let no: u32 = FromStr::from_str(account_no.as_str()).unwrap();
@@ -182,7 +182,22 @@ fn main() {
                         _ => {}
                     }
                 },
-                4 => {}
+                4 => 'deposit: loop {
+                    match get_account_details_from_user(
+                        "enter account no and deposit",
+                        vec!["u32", "string"],
+                    ) {
+                        Ok(account_details) => {
+                            let details: Vec<&str> = account_details.split(',').collect();
+                            let no: u32 = FromStr::from_str(details[0]).unwrap();
+                            let deposit: i128 = FromStr::from_str(details[1]).unwrap();
+                            bankService.Deposit(no, deposit);
+                            println!("Successfully deposited");
+                            break 'deposit;
+                        }
+                        _ => {}
+                    }
+                },
                 5 => {}
                 6 => {}
                 7 => {}
