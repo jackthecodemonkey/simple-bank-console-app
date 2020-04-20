@@ -100,11 +100,9 @@ fn handle_add_account() -> Result<String, ()> {
         Err(e) => {
             println!("{}", e);
             println!("pleae try again");
-            return Err(())
+            return Err(());
         }
-        _ => {
-            return Ok(String::from(trimed))
-        }
+        _ => return Ok(String::from(trimed)),
     }
 }
 
@@ -149,17 +147,25 @@ fn main() {
                         println!("{:?}", account);
                     }
                 }
-                2 => {
-                    'add_account: loop {
-                        match handle_add_account() {
-                            Ok(account_details) => {
-                                println!("{}", account_details);
-                                break 'add_account;
-                            },
-                            _ => {}  
+                2 => 'add_account: loop {
+                    match handle_add_account() {
+                        Ok(account_details) => {
+                            let account: Account = Account::from_str(account_details);
+                            match bankService.AddAccount(account) {
+                                Ok(_) => {
+                                    println!("Account successfully added.");
+                                    break 'add_account;
+                                },
+                                Err(e) => {
+                                    println!("{}", e);
+                                    println!("please try again");
+                                }
+                            }
+                            
                         }
+                        _ => {}
                     }
-                }
+                },
                 3 => {}
                 4 => {}
                 5 => {}

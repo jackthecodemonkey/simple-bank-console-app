@@ -1,10 +1,10 @@
 use super::super::super::models::AccountModel::Account;
 use super::super::super::models::AccountsModel::Accounts;
+use super::super::super::models::TransactionType::TransactionType;
 use super::super::super::models::TransferModel::Transfer;
+use super::super::super::services::FileDBContext::FileDBContext;
 use super::super::super::traits::BankServiceTrait::BankServiceTrait;
 use super::super::super::traits::Transaction::Transaction;
-use super::super::super::models::TransactionType::TransactionType;
-use super::super::super::services::FileDBContext::FileDBContext;
 
 use std::io::prelude::*;
 use std::io::SeekFrom;
@@ -35,11 +35,19 @@ impl<'a, 'b> BankServiceTrait for FileDBContext<'a, 'b> {
         }
     }
     fn AddAccount(&mut self, account: Account) -> Result<Account, &str> {
-        let csv_account: String = account.Stringify();
-        if let Err(e) = write!(self.context.openOptions, "{}", csv_account.as_str()) {
-            return Err("Failed to add a new account");
+        let allAccounts: Accounts = self.LoadData();
+        match allAccounts.HasAccount(account.no) {
+            true => {
+                return Err("Account already exists.");
+            }
+            false => {
+                let csv_account: String = account.Stringify();
+                if let Err(e) = write!(self.context.openOptions, "{}", csv_account.as_str()) {
+                    return Err("Failed to add a new account");
+                }
+                Ok(account)
+            }
         }
-        Ok(account)
     }
     fn DeleteAccount(&mut self, account_no: u32) -> &'static str {
         let mut allAccounts: Accounts = self.LoadData();

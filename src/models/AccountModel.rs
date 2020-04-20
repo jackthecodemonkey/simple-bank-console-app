@@ -45,7 +45,7 @@ impl Account {
         let split_into: Vec<&str> = account_details.split(',').collect();
         let no: u32 = FromStr::from_str(split_into[0]).unwrap();
         let name: String = split_into[1].to_string();
-        let deposit: i128 = <i128 as FromStr>::from_str(split_into[3]).unwrap();
+        let deposit: i128 = <i128 as FromStr>::from_str(split_into[2]).unwrap();
         Account {
             no,
             name,
