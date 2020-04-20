@@ -92,11 +92,11 @@ fn read_input_from_user() -> String {
     input_text
 }
 
-fn handle_add_account() -> Result<String, ()> {
-    println!("enter account details with comma seprated values eg: account number, account name, deposit");
+fn get_account_details_from_user(msg: &str, expected_types: Vec<&str>) -> Result<String, ()> {
+    println!("{}", msg);
     let account_str = read_input_from_user();
     let trimed = account_str.trim();
-    match validate_arguments(trimed, vec!["u32", "string", "i128"]) {
+    match validate_arguments(trimed, expected_types) {
         Err(e) => {
             println!("{}", e);
             println!("pleae try again");
@@ -148,25 +148,40 @@ fn main() {
                     }
                 }
                 2 => 'add_account: loop {
-                    match handle_add_account() {
+                    match get_account_details_from_user(
+                        "enter account details with comma seprated values eg: account number, account name, deposit",
+                        vec!["u32", "string", "i128"]
+                    ) {
                         Ok(account_details) => {
                             let account: Account = Account::from_str(account_details);
                             match bankService.AddAccount(account) {
                                 Ok(_) => {
                                     println!("Account successfully added.");
                                     break 'add_account;
-                                },
+                                }
                                 Err(e) => {
                                     println!("{}", e);
                                     println!("please try again");
                                 }
                             }
-                            
                         }
                         _ => {}
                     }
                 },
-                3 => {}
+                3 => 'delete_account: loop {
+                    match get_account_details_from_user(
+                        "enter account number to be deleted from system",
+                        vec!["u32"]
+                    ) {
+                        Ok(account_no) => {
+                            let no: u32 = FromStr::from_str(account_no.as_str()).unwrap();
+                            bankService.DeleteAccount(no);
+                            println!("Account successfully deleted.");
+                            break 'delete_account;
+                        }
+                        _ => {}
+                    }
+                },
                 4 => {}
                 5 => {}
                 6 => {}
