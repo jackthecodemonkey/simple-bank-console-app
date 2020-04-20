@@ -29,11 +29,13 @@
                2. Continue implementing transaction context : DONE
 
        2. This service will be injected to a controller to consume
-         TODO:: 
          1. show menu in loop 
          so that user keep using other transactions : DONE
 
          2. continue implementing each number using match block
+            TODO::
+               1. continue wokring on add account block
+                  create account model from string and add it to bank service
 
     7. Implement controller 
        1. use bankservice for transactions
