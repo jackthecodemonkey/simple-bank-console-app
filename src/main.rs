@@ -191,14 +191,37 @@ fn main() {
                             let details: Vec<&str> = account_details.split(',').collect();
                             let no: u32 = FromStr::from_str(details[0]).unwrap();
                             let deposit: i128 = FromStr::from_str(details[1]).unwrap();
-                            bankService.Deposit(no, deposit);
-                            println!("Successfully deposited");
-                            break 'deposit;
+                            match bankService.Deposit(no, deposit) {
+                                Ok(_) => {
+                                    println!("Successfully deposited");
+                                    break 'deposit;
+                                }
+                                Err(e) => println!("{}", e),
+                            }
                         }
                         _ => {}
                     }
                 },
-                5 => {}
+                5 => 'withdraw: loop {
+                    match get_account_details_from_user(
+                        "enter account no and amount for withdrawal",
+                        vec!["u32", "string"],
+                    ) {
+                        Ok(account_details) => {
+                            let details: Vec<&str> = account_details.split(',').collect();
+                            let no: u32 = FromStr::from_str(details[0]).unwrap();
+                            let deposit: i128 = FromStr::from_str(details[1]).unwrap();
+                            match bankService.Withdraw(no, deposit) {
+                                Ok(_) => {
+                                    println!("Successfully withdrawn");
+                                    break 'withdraw;
+                                }
+                                Err(e) => println!("{}", e),
+                            }
+                        }
+                        _ => {}
+                    }
+                },
                 6 => {}
                 7 => {}
                 _ => {

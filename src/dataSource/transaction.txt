@@ -52,3 +52,5 @@ type: transfer ,date: 2020-04-14T21:35:14.668475400+10:00
 1,VicVic,246490, type: deposit ,date: 2020-04-16T21:40:58.866734500+10:00
 1,VicVic,258790, type: deposit ,date: 2020-04-16T21:41:03.647841300+10:00
 12,jack,50123, type: deposit ,date: 2020-04-20T21:47:01.673031400+10:00
+7,VicVic,9900, type: deposit ,date: 2020-04-22T21:19:15.114198500+10:00
+7,VicVic,9900, type: withdraw ,date: 2020-04-22T21:23:21.220851100+10:00
