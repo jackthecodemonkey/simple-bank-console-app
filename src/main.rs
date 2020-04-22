@@ -1,3 +1,4 @@
+#![feature(drain_filter)]
 mod models;
 mod services;
 mod traits;
@@ -222,8 +223,32 @@ fn main() {
                         _ => {}
                     }
                 },
-                6 => {}
-                7 => {}
+                6 => 'transfer: loop {
+                    match get_account_details_from_user(
+                        "enter your account no, the other party's account no and your amount",
+                        vec!["u32", "u32", "i128"],
+                    ) {
+                        Ok(account_details) => {
+                            let v: Vec<&str> = account_details.split(',').collect();
+                            let from: u32 = u32::from_str(v[0]).unwrap();
+                            let to: u32 = u32::from_str(v[1]).unwrap();
+                            let amount: i128 = i128::from_str(v[2]).unwrap();
+
+                            let transfer: Transfer = Transfer { from, to, amount };
+                            match bankService.Transfer(transfer) {
+                                Ok(_) => {
+                                    println!("Successfully transferred");
+                                    break 'transfer;
+                                },
+                                Err(e) => println!("{}", e)
+                            }
+                        }
+                        _ => {}
+                    }
+                },
+                7 => {
+                    break 'outer;
+                }
                 _ => {
                     println!("invalid transaction entered {}", i);
                     continue 'outer;
