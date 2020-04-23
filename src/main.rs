@@ -27,10 +27,11 @@ fn main() {
             context: FileContext::new("./src/dataSource/data.txt"),
             transaction_context: FileContext::new("./src/dataSource/transaction.txt"),
         }),
-        _ => BankService::new(FileDBContext {
+        "use-db" => BankService::new(FileDBContext {
             context: FileContext::new("./src/dataSource/data.txt"),
             transaction_context: FileContext::new("./src/dataSource/transaction.txt"),
-        })
+        }),
+        _ => panic!("Not supported db type")
     };
 
     let mut view = View {
