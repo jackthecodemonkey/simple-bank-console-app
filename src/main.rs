@@ -8,54 +8,18 @@ use models::AccountsModel::Accounts;
 use models::BankModel::Bank;
 use models::TransactionType::TransactionType;
 use models::TransferModel::Transfer;
+use models::Commands::{ Commands, ValidCommands };
 use services::BankService::BankService;
 use std::env;
 // use services::SQLContext::SQLContext;
 use models::FileContext::FileContext;
 use services::FileDBContext::FileDBContext;
 use traits::BankServiceTrait::BankServiceTrait;
+use traits::ValidateCommands::ValidateCommands;
 use traits::Transaction::Transaction;
 
 use std::io::{self, Read};
 
-trait ValidateCommands {
-    fn validate(&self, valid_commands: &ValidCommands) -> Result<(), String>;
-}
-
-#[derive(Debug)]
-struct ValidCommands {
-    valid_commands: Vec<String>,
-}
-
-#[derive(Debug)]
-struct Commands {
-    arguments: Vec<String>,
-}
-
-impl Commands {
-    fn new(commands: Vec<String>) -> Self {
-        Commands {
-            arguments: commands,
-        }
-    }
-}
-
-impl ValidateCommands for Commands {
-    fn validate(&self, valid_commands: &ValidCommands) -> Result<(), String> {
-        let mut invalid_commands: String = String::from("");
-        for argument in self.arguments.iter() {
-            if !valid_commands.valid_commands.contains(argument) {
-                invalid_commands.push_str("invalid command entered: ");
-                invalid_commands.push_str(&argument.as_str());
-                invalid_commands.push_str("\n");
-            }
-        }
-        if invalid_commands != "" {
-            return Err(invalid_commands);
-        }
-        Ok(())
-    }
-}
 use std::str::FromStr;
 fn validate_arguments(user_arguments: &str, expected: Vec<&str>) -> Result<(), String> {
     let arguments: Vec<&str> = user_arguments.split(",").collect();
