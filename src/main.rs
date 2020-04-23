@@ -21,14 +21,16 @@ fn main() {
         panic!("Failed to parse command line arguments")
     }
 
-    let db_context_type = &arguments.arguments[0];
-    let _: String = String::from("use-file");
-    let _: String = String::from("use-db");
+    let db_context_type = arguments.arguments[0].as_str();
     let bank_service = match db_context_type {
-        _ => BankService::new(FileDBContext {
+        "use-file" => BankService::new(FileDBContext {
             context: FileContext::new("./src/dataSource/data.txt"),
             transaction_context: FileContext::new("./src/dataSource/transaction.txt"),
         }),
+        _ => BankService::new(FileDBContext {
+            context: FileContext::new("./src/dataSource/data.txt"),
+            transaction_context: FileContext::new("./src/dataSource/transaction.txt"),
+        })
     };
 
     let mut view = View {
