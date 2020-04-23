@@ -2,7 +2,6 @@
 mod models;
 mod services;
 mod traits;
-
 use models::Commands::{ Commands, ValidCommands };
 use services::BankService::BankService;
 use std::env;
@@ -23,17 +22,17 @@ fn main() {
     }
 
     let db_context_type = &arguments.arguments[0];
-    let file_type: String = String::from("use-file");
-    let db_type: String = String::from("use-db");
-    let mut bankService = match db_context_type {
-        file_type => BankService::new(FileDBContext {
+    let _: String = String::from("use-file");
+    let _: String = String::from("use-db");
+    let bank_service = match db_context_type {
+        _ => BankService::new(FileDBContext {
             context: FileContext::new("./src/dataSource/data.txt"),
             transaction_context: FileContext::new("./src/dataSource/transaction.txt"),
         }),
     };
 
     let mut view = View {
-        service: bankService
+        service: bank_service
     };
 
     view.Display();
