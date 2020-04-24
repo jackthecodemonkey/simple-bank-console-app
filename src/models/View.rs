@@ -174,7 +174,7 @@ fn validate_arguments(user_arguments: &str, expected: Vec<&str>) -> Result<(), S
             }
             "i128" => {
                 if let Err(_) = <i128 as FromStr>::from_str(current) {
-                    invalid_arguments.push_str(".\r\nError: Invalid deposit amount given.");
+                    invalid_arguments.push_str(".\nError: Invalid deposit amount given.");
                 }
             }
             _ => {}

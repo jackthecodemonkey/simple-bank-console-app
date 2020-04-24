@@ -32,7 +32,7 @@ impl Account {
     }
 
     pub fn Stringify(&self) -> String {
-        let mut s: String = String::from("\r\n");
+        let mut s: String = String::from("\n");
         s.push_str(&self.no.to_string());
         s.push_str(",");
         s.push_str(&self.name.to_string());
@@ -95,6 +95,6 @@ mod tests {
     fn should_convert_csv_string() {
         let mut account: Account = Account::new(1, "Jack".to_string(), 100);
         let string: String = account.Stringify();
-        assert_eq!(string, String::from("\r\n1,Jack,100"));
+        assert_eq!(string, String::from("\n1,Jack,100"));
     }
 }

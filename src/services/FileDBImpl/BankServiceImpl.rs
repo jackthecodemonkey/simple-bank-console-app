@@ -18,10 +18,11 @@ impl<'a, 'b> BankServiceTrait for FileDBContext<'a, 'b> {
         self.context.dbContext.read_to_string(&mut contents);
         Accounts {
             accounts: contents
-                .split("\r\n")
+                .split("\n")
                 .filter(|&x| *&x != "")
                 .map(|x| -> Account {
                     let sliced: Vec<&str> = x.split(",").collect();
+                    println!("{:?}", sliced);
                     if sliced.len() != 3 {
                         panic!("data is currupted");
                     }
@@ -83,7 +84,7 @@ impl<'a, 'b> BankServiceTrait for FileDBContext<'a, 'b> {
         if allAccounts.HasAccount(from) && allAccounts.HasAccount(to) {
             if let Ok(fromAccount) = allAccounts.FindByAccountNo(from) {
                 if fromAccount.CanWithdraw(amount) {
-                    self.log_history(TransactionType::Transfer, String::from("\r\n"));
+                    self.log_history(TransactionType::Transfer, String::from("\n"));
                     let _ = self.Withdraw(from, amount);
                     return self.Deposit(to, amount);
                 }

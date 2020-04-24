@@ -1,4 +1,3 @@
-#![feature(drain_filter)]
 mod models;
 mod services;
 mod traits;

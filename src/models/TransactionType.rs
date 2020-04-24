@@ -11,7 +11,7 @@ impl TransactionType {
     pub fn get_transction_content(&self, content: String) -> String {
         let now = Local::now();
         let mut string = String::from(content);
-        if string != "\r\n" {
+        if string != "\n" {
             string.push_str(", ");
         }
         match self {
