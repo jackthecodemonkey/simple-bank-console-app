@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-#[derive(Debug)]
+#[derive(Debug, Queryable)]
 pub struct Account {
     pub no: u32,
     pub name: String,

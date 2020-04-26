@@ -1,12 +1,19 @@
+#[macro_use]
+extern crate diesel;
+extern crate dotenv;
+
+mod dbConnections;
 mod models;
 mod services;
 mod traits;
+pub mod schema;
+use std::env;
 use models::Commands::Commands;
 use models::FileContext::FileContext;
 use models::View::View;
 use services::BankService::BankService;
 use services::FileDBContext::FileDBContext;
-use std::env;
+use dbConnections::db_connection::establish_connection;
 
 fn main() {
     let arguments: Commands = Commands::new(env::args().skip(1).collect());
