@@ -1,6 +1,7 @@
 use std::str::FromStr;
+use super::super::schema::accounts;
 
-#[derive(Debug, Queryable)]
+#[derive(Debug, Queryable, Insertable)]
 pub struct Account {
     pub no: i32,
     pub name: String,
