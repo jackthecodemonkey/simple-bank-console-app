@@ -5,7 +5,7 @@ use super::super::traits::BankServiceTrait::BankServiceTrait;
 
 #[derive(Debug)]
 pub struct SQLContext {
-    pub dbContext: u32,
+    pub dbContext: i32,
 }
 
 impl BankServiceTrait for SQLContext {
@@ -17,13 +17,13 @@ impl BankServiceTrait for SQLContext {
     fn AddAccount(&mut self, account: Account) -> Result<Account, &str> {
         Err("Not implemented yet")
     }
-    fn DeleteAccount(&mut self, account_no: u32) -> &'static str {
+    fn DeleteAccount(&mut self, account_no: i32) -> &'static str {
         "Not implemented yet"
     }
-    fn Deposit(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
+    fn Deposit(&mut self, account_no: i32, amount: f64) -> Result<Accounts, &str> {
         Err("Not implemented yet")
     }
-    fn Withdraw(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
+    fn Withdraw(&mut self, account_no: i32, amount: f64) -> Result<Accounts, &str> {
         Err("Not implemented yet")
     }
     fn Transfer(&mut self, transfer: Transfer) -> Result<Accounts, &str> {

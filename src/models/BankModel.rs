@@ -24,12 +24,12 @@ impl Bank {
 
     pub fn FindByAccountNo<'a>(
         &'a mut self,
-        accountNo: u32,
+        accountNo: i32,
     ) -> Result<&'a mut Account, &'static str> {
         self.accounts.FindByAccountNo(accountNo)
     }
 
-    pub fn Deposit(&mut self, accountNo: u32, amount: i128) -> Result<&Account, &'static str> {
+    pub fn Deposit(&mut self, accountNo: i32, amount: f64) -> Result<&Account, &'static str> {
         let account = self.FindByAccountNo(accountNo)?;
         account.Deposit(amount);
         Ok(account)
@@ -49,7 +49,7 @@ impl Bank {
         }
     }
 
-    pub fn Delete_account(&mut self, no: u32) -> Result<&'static str, &'static str> {
+    pub fn Delete_account(&mut self, no: i32) -> Result<&'static str, &'static str> {
         let original_accounts_len: usize = self.accounts.accounts.len();
         self.accounts.accounts.retain(|account| account.no != no);
 
@@ -66,8 +66,8 @@ mod tests {
 
     #[test]
     fn can_add_account() {
-        let account = Account::new(1, String::from("Jack"), 1000);
-        let account2 = Account::new(2, String::from("Seiko"), 5000);
+        let account = Account::new(1, String::from("Jack"), 1000.0);
+        let account2 = Account::new(2, String::from("Seiko"), 5000.0);
         let mut accounts = Vec::new();
         accounts.push(account);
 
@@ -80,7 +80,7 @@ mod tests {
 
     #[test]
     fn find_by_no() {
-        let account = Account::new(1, String::from("Jack"), 1000);
+        let account = Account::new(1, String::from("Jack"), 1000.0);
         let mut accounts = Vec::new();
         accounts.push(account);
 
@@ -93,22 +93,22 @@ mod tests {
 
     #[test]
     fn should_deposit() {
-        let account = Account::new(1, String::from("Jack"), 1000);
+        let account = Account::new(1, String::from("Jack"), 1000.0);
         let mut accounts = Vec::new();
         accounts.push(account);
 
         let acc = Accounts { accounts };
         let mut bank = Bank { accounts: acc };
 
-        if let Ok(jack_account) = bank.Deposit(1, 500) {
-            assert_eq!(jack_account.deposit, 1500);
+        if let Ok(jack_account) = bank.Deposit(1, 500.0) {
+            assert_eq!(jack_account.deposit, 1500.0);
         }
     }
 
     #[test]
     fn should_transfer() {
-        let account = Account::new(1, String::from("Jack"), 1000);
-        let account2 = Account::new(2, String::from("Seiko"), 5000);
+        let account = Account::new(1, String::from("Jack"), 1000.0);
+        let account2 = Account::new(2, String::from("Seiko"), 5000.0);
         let mut accounts = Vec::new();
         accounts.push(account);
         accounts.push(account2);
@@ -119,21 +119,21 @@ mod tests {
         let transfer_from_jack_to_seiko = Transfer {
             from: 1,
             to: 2,
-            amount: 750,
+            amount: 750.0,
         };
 
         bank.Transfer(transfer_from_jack_to_seiko);
 
         if let Ok(seiko_account) = bank.FindByAccountNo(2) {
-            assert_eq!(seiko_account.deposit, 5750);
+            assert_eq!(seiko_account.deposit, 5750.0);
         }
     }
 
     #[test]
     fn should_delete_account() {
-        let account = Account::new(1, String::from("Jack"), 1000);
-        let account2 = Account::new(2, String::from("Seiko"), 5000);
-        let account3 = Account::new(3, String::from("Mia"), 5000);
+        let account = Account::new(1, String::from("Jack"), 1000.0);
+        let account2 = Account::new(2, String::from("Seiko"), 5000.0);
+        let account3 = Account::new(3, String::from("Mia"), 5000.0);
         let mut accounts = Vec::new();
         accounts.push(account);
         accounts.push(account2);
@@ -153,9 +153,9 @@ mod tests {
 
     #[test]
     fn should_not_create_duplicate_accounts() {
-        let account = Account::new(1, String::from("Jack"), 1000);
-        let account2 = Account::new(3, String::from("Seiko"), 5000);
-        let account3 = Account::new(3, String::from("Mia"), 5000);
+        let account = Account::new(1, String::from("Jack"), 1000.0);
+        let account2 = Account::new(3, String::from("Seiko"), 5000.0);
+        let account3 = Account::new(3, String::from("Mia"), 5000.0);
         let mut accounts = Vec::new();
         accounts.push(account);
         accounts.push(account2);

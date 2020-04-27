@@ -8,7 +8,7 @@ pub struct Accounts {
 impl Accounts {
     pub fn FindByAccountNo<'a>(
         &'a mut self,
-        accountNo: u32,
+        accountNo: i32,
     ) -> Result<&'a mut Account, &'static str> {
         let mut iter = self.accounts.iter_mut();
         return match iter.find(|acc| acc.no == accountNo) {
@@ -17,7 +17,7 @@ impl Accounts {
         };
     }
 
-    pub fn HasAccount(&self, accountNo: u32) -> bool {
+    pub fn HasAccount(&self, accountNo: i32) -> bool {
         let mut iter = self.accounts.iter();
         return match iter.find(|acc| acc.no == accountNo) {
             Some(_) => true,
@@ -29,7 +29,7 @@ impl Accounts {
         &self.accounts.push(account);
     }
 
-    pub fn DeleteAccount(&mut self, accountNo: u32) -> Result<(), &str> {
+    pub fn DeleteAccount(&mut self, accountNo: i32) -> Result<(), &str> {
         if self.HasAccount(accountNo) {
             let len: usize = self.accounts.len();
             let index = self
@@ -55,7 +55,7 @@ impl Accounts {
         remaining_accounts
     }
 
-    pub fn StringifyByAccountNo(&mut self, accountNo: u32) -> Result<String, &str> {
+    pub fn StringifyByAccountNo(&mut self, accountNo: i32) -> Result<String, &str> {
         if self.HasAccount(accountNo) {
             if let Ok(account) = self.FindByAccountNo(accountNo) {
                 return Ok(account.Stringify())
@@ -70,8 +70,8 @@ mod tests {
     use super::*;
     #[test]
     fn should_find_account_by_no() {
-        let account = Account::new(1, String::from("Jack"), 1000);
-        let account2 = Account::new(2, String::from("Seiko"), 5000);
+        let account = Account::new(1, String::from("Jack"), 1000.0);
+        let account2 = Account::new(2, String::from("Seiko"), 5000.0);
         let mut accounts = Vec::new();
         accounts.push(account);
         accounts.push(account2);
@@ -85,8 +85,8 @@ mod tests {
 
     #[test]
     fn should_not_find_accout_by_no() {
-        let account = Account::new(1, String::from("Jack"), 1000);
-        let account2 = Account::new(2, String::from("Seiko"), 5000);
+        let account = Account::new(1, String::from("Jack"), 1000.0);
+        let account2 = Account::new(2, String::from("Seiko"), 5000.0);
         let mut accounts = Vec::new();
         accounts.push(account);
         accounts.push(account2);
@@ -102,8 +102,8 @@ mod tests {
 
     #[test]
     fn can_add_account() {
-        let account = Account::new(1, String::from("Jack"), 1000);
-        let account2 = Account::new(2, String::from("Seiko"), 5000);
+        let account = Account::new(1, String::from("Jack"), 1000.0);
+        let account2 = Account::new(2, String::from("Seiko"), 5000.0);
         let mut accounts = Vec::new();
         accounts.push(account);
 
@@ -115,8 +115,8 @@ mod tests {
 
     #[test]
     fn should_delete_account() {
-        let account = Account::new(1, String::from("Jack"), 1000);
-        let account2 = Account::new(2, String::from("Seiko"), 5000);
+        let account = Account::new(1, String::from("Jack"), 1000.0);
+        let account2 = Account::new(2, String::from("Seiko"), 5000.0);
         let mut accounts = Vec::new();
         accounts.push(account);
         accounts.push(account2);
@@ -128,8 +128,8 @@ mod tests {
 
     #[test]
     fn should_not_delete_account() {
-        let account = Account::new(1, String::from("Jack"), 1000);
-        let account2 = Account::new(2, String::from("Seiko"), 5000);
+        let account = Account::new(1, String::from("Jack"), 1000.0);
+        let account2 = Account::new(2, String::from("Seiko"), 5000.0);
         let mut accounts = Vec::new();
         accounts.push(account);
         accounts.push(account2);

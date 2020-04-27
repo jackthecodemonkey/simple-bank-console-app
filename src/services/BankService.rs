@@ -29,13 +29,13 @@ where
     fn AddAccount(&mut self, account: Account) -> Result<Account, &str> {
         self.dbContext.AddAccount(account)
     }
-    fn DeleteAccount(&mut self, account_no: u32) -> &'static str {
+    fn DeleteAccount(&mut self, account_no: i32) -> &'static str {
         self.dbContext.DeleteAccount(account_no)
     }
-    fn Deposit(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
+    fn Deposit(&mut self, account_no: i32, amount: f64) -> Result<Accounts, &str> {
         self.dbContext.Deposit(account_no, amount)
     }
-    fn Withdraw(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
+    fn Withdraw(&mut self, account_no: i32, amount: f64) -> Result<Accounts, &str> {
         self.dbContext.Withdraw(account_no, amount)
     }
     fn Transfer(&mut self, transfer: Transfer) -> Result<Accounts, &str> {

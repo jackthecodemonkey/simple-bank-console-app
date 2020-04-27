@@ -25,7 +25,7 @@ impl<T: BankServiceTrait> View<T> {
             println!("****Enter a number****");
             let input_text = read_input_from_user();
             let trimmed = input_text.trim();
-            match trimmed.parse::<u32>() {
+            match trimmed.parse::<i32>() {
                 Ok(i) => match i {
                     1 => {
                         let accounts = self.service.LoadData();
@@ -36,7 +36,7 @@ impl<T: BankServiceTrait> View<T> {
                     2 => 'add_account: loop {
                         match get_account_details_from_user(
                             "enter account details with comma seprated values eg: account number, account name, deposit",
-                            vec!["u32", "string", "i128"]
+                            vec!["i32", "string", "f64"]
                         ) {
                             Ok(account_details) => {
                                 let account: Account = Account::from_str(account_details);
@@ -57,10 +57,10 @@ impl<T: BankServiceTrait> View<T> {
                     3 => 'delete_account: loop {
                         match get_account_details_from_user(
                             "enter account number to be deleted from system",
-                            vec!["u32"],
+                            vec!["i32"],
                         ) {
                             Ok(account_no) => {
-                                let no: u32 = FromStr::from_str(account_no.as_str()).unwrap();
+                                let no: i32 = FromStr::from_str(account_no.as_str()).unwrap();
                                 self.service.DeleteAccount(no);
                                 println!("Account successfully deleted.");
                                 break 'delete_account;
@@ -71,12 +71,12 @@ impl<T: BankServiceTrait> View<T> {
                     4 => 'deposit: loop {
                         match get_account_details_from_user(
                             "enter account no and deposit",
-                            vec!["u32", "string"],
+                            vec!["i32", "string"],
                         ) {
                             Ok(account_details) => {
                                 let details: Vec<&str> = account_details.split(',').collect();
-                                let no: u32 = FromStr::from_str(details[0]).unwrap();
-                                let deposit: i128 = FromStr::from_str(details[1]).unwrap();
+                                let no: i32 = FromStr::from_str(details[0]).unwrap();
+                                let deposit: f64 = FromStr::from_str(details[1]).unwrap();
                                 match self.service.Deposit(no, deposit) {
                                     Ok(_) => {
                                         println!("Successfully deposited");
@@ -91,12 +91,12 @@ impl<T: BankServiceTrait> View<T> {
                     5 => 'withdraw: loop {
                         match get_account_details_from_user(
                             "enter account no and amount for withdrawal",
-                            vec!["u32", "string"],
+                            vec!["i32", "string"],
                         ) {
                             Ok(account_details) => {
                                 let details: Vec<&str> = account_details.split(',').collect();
-                                let no: u32 = FromStr::from_str(details[0]).unwrap();
-                                let deposit: i128 = FromStr::from_str(details[1]).unwrap();
+                                let no: i32 = FromStr::from_str(details[0]).unwrap();
+                                let deposit: f64 = FromStr::from_str(details[1]).unwrap();
                                 match self.service.Withdraw(no, deposit) {
                                     Ok(_) => {
                                         println!("Successfully withdrawn");
@@ -111,13 +111,13 @@ impl<T: BankServiceTrait> View<T> {
                     6 => 'transfer: loop {
                         match get_account_details_from_user(
                             "enter your account no, the other party's account no and your amount",
-                            vec!["u32", "u32", "i128"],
+                            vec!["i32", "i32", "f64"],
                         ) {
                             Ok(account_details) => {
                                 let v: Vec<&str> = account_details.split(',').collect();
-                                let from: u32 = u32::from_str(v[0]).unwrap();
-                                let to: u32 = u32::from_str(v[1]).unwrap();
-                                let amount: i128 = i128::from_str(v[2]).unwrap();
+                                let from: i32 = i32::from_str(v[0]).unwrap();
+                                let to: i32 = i32::from_str(v[1]).unwrap();
+                                let amount: f64 = f64::from_str(v[2]).unwrap();
                                 let transfer: Transfer = Transfer { from, to, amount };
                                 match self.service.Transfer(transfer) {
                                     Ok(_) => {
@@ -167,13 +167,13 @@ fn validate_arguments(user_arguments: &str, expected: Vec<&str>) -> Result<(), S
     for i in 0..expected.len() {
         let current: &str = arguments[i];
         match expected[i] {
-            "u32" => {
-                if let Err(_) = <u32 as FromStr>::from_str(current) {
+            "i32" => {
+                if let Err(_) = <i32 as FromStr>::from_str(current) {
                     invalid_arguments.push_str("Error: Invalid account number given.");
                 }
             }
-            "i128" => {
-                if let Err(_) = <i128 as FromStr>::from_str(current) {
+            "f64" => {
+                if let Err(_) = <f64 as FromStr>::from_str(current) {
                     invalid_arguments.push_str(".\nError: Invalid deposit amount given.");
                 }
             }

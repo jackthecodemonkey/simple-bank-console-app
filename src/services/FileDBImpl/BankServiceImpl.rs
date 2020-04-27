@@ -50,13 +50,13 @@ impl<'a, 'b> BankServiceTrait for FileDBContext<'a, 'b> {
             }
         }
     }
-    fn DeleteAccount(&mut self, account_no: u32) -> &'static str {
+    fn DeleteAccount(&mut self, account_no: i32) -> &'static str {
         let mut allAccounts: Accounts = self.LoadData();
         let _ = allAccounts.DeleteAccount(account_no).unwrap();
         let _ = self.rewrite_file(&allAccounts);
         "Successfully deleted"
     }
-    fn Deposit(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
+    fn Deposit(&mut self, account_no: i32, amount: f64) -> Result<Accounts, &str> {
         let mut allAccounts: Accounts = self.LoadData();
         if let Ok(account) = allAccounts.FindByAccountNo(account_no) {
             let _ = account.Deposit(amount);
@@ -66,7 +66,7 @@ impl<'a, 'b> BankServiceTrait for FileDBContext<'a, 'b> {
         }
         return Err("Failed to deposit");
     }
-    fn Withdraw(&mut self, account_no: u32, amount: i128) -> Result<Accounts, &str> {
+    fn Withdraw(&mut self, account_no: i32, amount: f64) -> Result<Accounts, &str> {
         let mut allAccounts: Accounts = self.LoadData();
         if let Ok(account) = allAccounts.FindByAccountNo(account_no) {
             if account.CanWithdraw(amount) {
