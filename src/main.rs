@@ -61,9 +61,10 @@ impl<'a> BankServiceTrait for DBContext<'a> {
         "Successfullt deleted"
     }
     fn Deposit(&mut self, account_no: i32, amount: f64) -> Result<Accounts, &str> {
-        if let Ok(account) = self.GetAccount(account_no) {
+        if let Ok(ref mut account) = self.GetAccount(account_no) {
+            let _ = account.Deposit(amount);
             let _ = diesel::update(accounts.find(account_no))
-                .set(deposit.eq(amount + account.deposit))
+                .set(deposit.eq(account.deposit))
                 .get_result::<Account>(self.connection)
                 .expect("Unable to deposit");
             let accs = self.LoadData();
@@ -72,7 +73,16 @@ impl<'a> BankServiceTrait for DBContext<'a> {
         Err("Unable to deposit")
     }
     fn Withdraw(&mut self, account_no: i32, amount: f64) -> Result<Accounts, &str> {
-        Err("Not implemented yet")
+        if let Ok(ref mut account) = self.GetAccount(account_no) {
+            let _ = account.Withdraw(amount);
+            let _ = diesel::update(accounts.find(account_no))
+                .set(deposit.eq(account.deposit))
+                .get_result::<Account>(self.connection)
+                .expect("Unable to deposit");
+            let accs = self.LoadData();
+            return Ok(accs);
+        }
+        Err("Unable to withdraw")
     }
     fn Transfer(&mut self, transfer: Transfer) -> Result<Accounts, &str> {
         Err("Not implemented yet")
