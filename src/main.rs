@@ -85,7 +85,16 @@ impl<'a> BankServiceTrait for DBContext<'a> {
         Err("Unable to withdraw")
     }
     fn Transfer(&mut self, transfer: Transfer) -> Result<Accounts, &str> {
-        Err("Not implemented yet")
+        let Transfer { from, to, amount } = transfer;
+        let mut from_account = self.GetAccount(from).unwrap();
+        let _ = self.GetAccount(to).unwrap();
+        if from_account.CanWithdraw(amount) {
+            self.Withdraw(from, amount).unwrap();
+            self.Deposit(to, amount).unwrap();
+            let accs = self.LoadData();
+            return Ok(accs);
+        }
+        Err("Unable to transfer")
     }
 }
 
@@ -97,8 +106,6 @@ fn main() {
         transaction_context: transactions,
         connection: &connection,
     };
-
-    dbContext.Deposit(2, 500.0);
 
     // let results = accounts.load::<Account>(&connection)
     // .expect("Error loading accounts");
