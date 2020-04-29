@@ -18,7 +18,7 @@ use models::TransactionType::TransactionType;
 use models::TransferModel::Transfer;
 use models::View::View;
 use schema::accounts::dsl::*;
-use schema::transactions::dsl::{id as transaction_number, transactions};
+use schema::transactions::dsl::{no as transaction_number, transactions};
 use services::BankService::BankService;
 use services::FileDBContext::FileDBContext;
 use std::env;
@@ -41,13 +41,15 @@ impl<'a> DBContext<'a> {
         Ok(acc)
     }
 
-    fn wrtie_transaction(
+    fn write_transaction(
         &self,
+        account_no: i32,
         transaction_type: TransactionType,
         amount: f64,
         current_balance: f64,
     ) -> Result<(), &str> {
         let transaction = TransactionModel {
+            no: account_no,
             transaction_type: match transaction_type {
                 Deposit => "Deposit".to_string(),
                 Withdraw => "Withdraw".to_string(),
@@ -94,6 +96,7 @@ impl<'a> BankServiceTrait for DBContext<'a> {
                 .get_result::<Account>(self.connection)
                 .expect("Unable to deposit");
             let accs = self.LoadData();
+            self.write_transaction(account_no,TransactionType::Deposit,amount,account.deposit);
             return Ok(accs);
         }
         Err("Unable to deposit")
@@ -132,6 +135,8 @@ fn main() {
         transaction_context: transactions,
         connection: &connection,
     };
+
+    dbContext.Deposit(2,87900.0);
 
     // let results = accounts.load::<Account>(&connection)
     // .expect("Error loading accounts");
