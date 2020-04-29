@@ -13,6 +13,7 @@ use models::AccountModel::Account;
 use models::AccountsModel::Accounts;
 use models::Commands::Commands;
 use models::FileContext::FileContext;
+use models::TransactionType::TransactionType;
 use models::TransferModel::Transfer;
 use models::View::View;
 use schema::accounts::dsl::*;
@@ -22,6 +23,7 @@ use services::FileDBContext::FileDBContext;
 use std::env;
 
 use traits::BankServiceTrait::BankServiceTrait;
+use models::TransactionModel::TransactionModel;
 
 pub struct DBContext<'a> {
     context: schema::accounts::table,
@@ -37,6 +39,19 @@ impl<'a> DBContext<'a> {
             .expect("Unable to get account");
         Ok(acc)
     }
+
+    // fn wrtie_transaction(
+    //     &self,
+    //     transaction_type: TransactionType,
+    //     amount: f64,
+    //     current_balance: f64,
+    // ) -> Result<(), &str> {
+    //     let transaction: TransactionModel = TransactionModel {
+
+    //     }
+    //     diesel::insert_into(transactions)
+    //         values()
+    // }
 }
 
 impl<'a> BankServiceTrait for DBContext<'a> {
