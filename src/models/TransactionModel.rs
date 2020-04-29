@@ -1,6 +1,6 @@
 use super::super::schema::transactions;
 
-#[derive(Debug, Queryable, Insertable)]
+#[derive(Debug, Queryable, Insertable, Default)]
 pub struct Transaction {
     id: i32,
     transaction_type: String,

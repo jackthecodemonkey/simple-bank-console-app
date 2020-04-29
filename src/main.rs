@@ -2,6 +2,7 @@
 extern crate diesel;
 extern crate dotenv;
 
+use std::default::Default;
 mod dbConnections;
 mod models;
 pub mod schema;
@@ -17,13 +18,13 @@ use models::TransactionType::TransactionType;
 use models::TransferModel::Transfer;
 use models::View::View;
 use schema::accounts::dsl::*;
-use schema::transactions::dsl::{no as transaction_number, transactions};
+use schema::transactions::dsl::{id as transaction_number, transactions};
 use services::BankService::BankService;
 use services::FileDBContext::FileDBContext;
 use std::env;
 
+use models::TransactionModel::Transaction as TransactionModel;
 use traits::BankServiceTrait::BankServiceTrait;
-use models::TransactionModel::TransactionModel;
 
 pub struct DBContext<'a> {
     context: schema::accounts::table,
@@ -40,18 +41,28 @@ impl<'a> DBContext<'a> {
         Ok(acc)
     }
 
-    // fn wrtie_transaction(
-    //     &self,
-    //     transaction_type: TransactionType,
-    //     amount: f64,
-    //     current_balance: f64,
-    // ) -> Result<(), &str> {
-    //     let transaction: TransactionModel = TransactionModel {
-
-    //     }
-    //     diesel::insert_into(transactions)
-    //         values()
-    // }
+    fn wrtie_transaction(
+        &self,
+        transaction_type: TransactionType,
+        amount: f64,
+        current_balance: f64,
+    ) -> Result<(), &str> {
+        let transaction = TransactionModel {
+            transaction_type: match transaction_type {
+                Deposit => "Deposit".to_string(),
+                Withdraw => "Withdraw".to_string(),
+                Transfer => "Transfer".to_string(),
+            },
+            transaction_amount: amount,
+            current_balance,
+            ..Default::default()
+        };
+        diesel::insert_into(transactions)
+            .values(transaction)
+            .get_result::<TransactionModel>(self.connection)
+            .expect("Error saving transaction");
+        Ok(())
+    }
 }
 
 impl<'a> BankServiceTrait for DBContext<'a> {
