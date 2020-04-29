@@ -10,17 +10,17 @@ use diesel::prelude::*;
 use super::super::models::TransactionType::TransactionType;
 use super::super::models::TransactionModel::{Transaction as TransactionModel, NewTransaction};
 
-pub struct SQLContext<'a> {
+pub struct SQLContext {
     pub context: super::super::schema::accounts::table,
     pub transaction_context: super::super::schema::transactions::table,
-    pub connection: &'a PgConnection,
+    pub connection: PgConnection,
 }
 
-impl<'a> SQLContext<'a> {
+impl SQLContext {
     fn GetAccount(&self, account_no: i32) -> Result<Account, &str> {
         let acc = accounts
             .find(account_no)
-            .get_result::<Account>(self.connection)
+            .get_result::<Account>(&self.connection)
             .expect("Unable to get account");
         Ok(acc)
     }
@@ -44,30 +44,30 @@ impl<'a> SQLContext<'a> {
         };
         diesel::insert_into(transactions)
             .values(transaction)
-            .get_result::<TransactionModel>(self.connection)
+            .get_result::<TransactionModel>(&self.connection)
             .expect("Error saving transaction");
         Ok(())
     }
 }
 
-impl<'a> BankServiceTrait for SQLContext<'a> {
+impl BankServiceTrait for SQLContext {
     fn LoadData(&mut self) -> Accounts {
         let results = self
             .context
-            .load::<Account>(self.connection)
+            .load::<Account>(&self.connection)
             .expect("Error loading accounts");
         Accounts { accounts: results }
     }
     fn AddAccount(&mut self, account: Account) -> Result<Account, &str> {
         let account = diesel::insert_into(accounts)
             .values(&account)
-            .get_result::<Account>(self.connection)
+            .get_result::<Account>(&self.connection)
             .expect("Error saving new account");
         Ok(account)
     }
     fn DeleteAccount(&mut self, account_no: i32) -> &'static str {
         diesel::delete(accounts.filter(no.eq(&account_no)))
-            .execute(self.connection)
+            .execute(&self.connection)
             .expect("Error deleting account");
         "Successfullt deleted"
     }
@@ -76,7 +76,7 @@ impl<'a> BankServiceTrait for SQLContext<'a> {
             let _ = account.Deposit(amount);
             let _ = diesel::update(accounts.find(account_no))
                 .set(deposit.eq(account.deposit))
-                .get_result::<Account>(self.connection)
+                .get_result::<Account>(&self.connection)
                 .expect("Unable to deposit");
             let accs = self.LoadData();
             let _ =self.write_transaction(account_no,TransactionType::Deposit,amount,account.deposit);
@@ -89,7 +89,7 @@ impl<'a> BankServiceTrait for SQLContext<'a> {
             let _ = account.Withdraw(amount);
             let _ = diesel::update(accounts.find(account_no))
                 .set(deposit.eq(account.deposit))
-                .get_result::<Account>(self.connection)
+                .get_result::<Account>(&self.connection)
                 .expect("Unable to deposit");
             let accs = self.LoadData();
             let _ = self.write_transaction(account_no,TransactionType::Withdraw,amount,account.deposit);

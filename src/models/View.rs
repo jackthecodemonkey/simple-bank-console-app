@@ -4,14 +4,12 @@ use super::super::traits::BankServiceTrait::BankServiceTrait;
 use super::super::models::AccountModel::Account;
 use super::super::models::TransferModel::Transfer;
 
-pub struct View<T>
-where
-    T: BankServiceTrait,
+pub struct View
 {
-    pub service: T,
+    pub service: Box<dyn BankServiceTrait>,
 }
 
-impl<T: BankServiceTrait> View<T> {
+impl View {
     pub fn Display(&mut self) {
         'outer: loop {
             println!("****Select transaction****");

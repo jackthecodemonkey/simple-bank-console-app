@@ -11,7 +11,7 @@ pub struct BankService<T> {
     pub dbContext: T,
 }
 
-impl<T> BankService<T> {
+impl<T> BankService<T> where T: BankServiceTrait {
     pub fn new(dbContext: T) -> BankService<T> {
         BankService {
             dbContext,
