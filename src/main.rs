@@ -16,6 +16,7 @@ use models::Commands::Commands;
 use models::FileContext::FileContext;
 use models::TransactionType::TransactionType;
 use models::TransferModel::Transfer;
+use services::SQLContext::SQLContext;
 use models::View::View;
 use schema::accounts::dsl::*;
 use schema::transactions::dsl::{no as transaction_number, transactions};
@@ -23,120 +24,21 @@ use services::BankService::BankService;
 use services::FileDBContext::FileDBContext;
 use std::env;
 
-use models::TransactionModel::Transaction as TransactionModel;
+use models::TransactionModel::{Transaction as TransactionModel, NewTransaction};
 use traits::BankServiceTrait::BankServiceTrait;
 
-pub struct DBContext<'a> {
-    context: schema::accounts::table,
-    transaction_context: schema::transactions::table,
-    connection: &'a PgConnection,
-}
 
-impl<'a> DBContext<'a> {
-    fn GetAccount(&self, account_no: i32) -> Result<Account, &str> {
-        let acc = accounts
-            .find(account_no)
-            .get_result::<Account>(self.connection)
-            .expect("Unable to get account");
-        Ok(acc)
-    }
-
-    fn write_transaction(
-        &self,
-        account_no: i32,
-        transaction_type: TransactionType,
-        amount: f64,
-        current_balance: f64,
-    ) -> Result<(), &str> {
-        let transaction = TransactionModel {
-            no: account_no,
-            transaction_type: match transaction_type {
-                Deposit => "Deposit".to_string(),
-                Withdraw => "Withdraw".to_string(),
-                Transfer => "Transfer".to_string(),
-            },
-            transaction_amount: amount,
-            current_balance,
-            ..Default::default()
-        };
-        diesel::insert_into(transactions)
-            .values(transaction)
-            .get_result::<TransactionModel>(self.connection)
-            .expect("Error saving transaction");
-        Ok(())
-    }
-}
-
-impl<'a> BankServiceTrait for DBContext<'a> {
-    fn LoadData(&mut self) -> Accounts {
-        let results = self
-            .context
-            .load::<Account>(self.connection)
-            .expect("Error loading accounts");
-        Accounts { accounts: results }
-    }
-    fn AddAccount(&mut self, account: Account) -> Result<Account, &str> {
-        let account = diesel::insert_into(accounts)
-            .values(&account)
-            .get_result::<Account>(self.connection)
-            .expect("Error saving new account");
-        Ok(account)
-    }
-    fn DeleteAccount(&mut self, account_no: i32) -> &'static str {
-        diesel::delete(accounts.filter(no.eq(&account_no)))
-            .execute(self.connection)
-            .expect("Error deleting account");
-        "Successfullt deleted"
-    }
-    fn Deposit(&mut self, account_no: i32, amount: f64) -> Result<Accounts, &str> {
-        if let Ok(ref mut account) = self.GetAccount(account_no) {
-            let _ = account.Deposit(amount);
-            let _ = diesel::update(accounts.find(account_no))
-                .set(deposit.eq(account.deposit))
-                .get_result::<Account>(self.connection)
-                .expect("Unable to deposit");
-            let accs = self.LoadData();
-            self.write_transaction(account_no,TransactionType::Deposit,amount,account.deposit);
-            return Ok(accs);
-        }
-        Err("Unable to deposit")
-    }
-    fn Withdraw(&mut self, account_no: i32, amount: f64) -> Result<Accounts, &str> {
-        if let Ok(ref mut account) = self.GetAccount(account_no) {
-            let _ = account.Withdraw(amount);
-            let _ = diesel::update(accounts.find(account_no))
-                .set(deposit.eq(account.deposit))
-                .get_result::<Account>(self.connection)
-                .expect("Unable to deposit");
-            let accs = self.LoadData();
-            return Ok(accs);
-        }
-        Err("Unable to withdraw")
-    }
-    fn Transfer(&mut self, transfer: Transfer) -> Result<Accounts, &str> {
-        let Transfer { from, to, amount } = transfer;
-        let mut from_account = self.GetAccount(from).unwrap();
-        let _ = self.GetAccount(to).unwrap();
-        if from_account.CanWithdraw(amount) {
-            self.Withdraw(from, amount).unwrap();
-            self.Deposit(to, amount).unwrap();
-            let accs = self.LoadData();
-            return Ok(accs);
-        }
-        Err("Unable to transfer")
-    }
-}
 
 fn main() {
     let connection = establish_connection();
 
-    let mut dbContext: DBContext = DBContext {
+    let mut dbContext: SQLContext = SQLContext {
         context: accounts,
         transaction_context: transactions,
         connection: &connection,
     };
 
-    dbContext.Deposit(2,87900.0);
+    dbContext.Deposit(1,23400.0);
 
     // let results = accounts.load::<Account>(&connection)
     // .expect("Error loading accounts");

@@ -7,7 +7,8 @@ table! {
 }
 
 table! {
-    transactions (no) {
+    transactions (id) {
+        id -> Int4,
         no -> Int4,
         transaction_type -> Varchar,
         transaction_amount -> Float8,
