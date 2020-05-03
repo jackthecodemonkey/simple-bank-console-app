@@ -1,22 +1,15 @@
 use std::fs::File;
 
-use super::super::models::AccountModel::Account;
-use super::super::models::AccountsModel::Accounts;
-use super::super::models::TransferModel::Transfer;
-use super::super::models::FileContext::FileContext;
-use super::super::traits::BankServiceTrait::BankServiceTrait;
-use super::super::traits::Transaction::Transaction;
-use super::super::models::TransactionType::TransactionType;
+use super::super::models::accounts_model::Accounts;
+use super::super::models::file_context::file_context;
 
 use std::io::prelude::*;
-use std::io::SeekFrom;
 use std::path::Path;
-use std::str::FromStr;
 
 #[derive(Debug)]
 pub struct FileDBContext<'a, 'b> {
-    pub context: FileContext<'a>,
-    pub transaction_context: FileContext<'b>,
+    pub context: file_context<'a>,
+    pub transaction_context: file_context<'b>,
 }
 
 impl<'a, 'b> FileDBContext<'a, 'b> {
@@ -27,14 +20,14 @@ impl<'a, 'b> FileDBContext<'a, 'b> {
     }
 
     pub fn rewrite_file(&mut self, accounts: &Accounts) -> Result<(), &str> {
-        let remaining_accounts: String = accounts.Stringify();
+        let remaining_accounts: String = accounts.stringify();
         let _ = self.reset_file();
-        let newFileContext: FileContext = FileContext::new(self.context.path);
-        self.context.dbContext = newFileContext.dbContext;
-        self.context.openOptions = newFileContext.openOptions;
+        let new_file_context: file_context = file_context::new(self.context.path);
+        self.context.db_context = new_file_context.db_context;
+        self.context.open_options = new_file_context.open_options;
         let _ = self
             .context
-            .openOptions
+            .open_options
             .write(remaining_accounts.as_bytes());
         Ok(())
     }

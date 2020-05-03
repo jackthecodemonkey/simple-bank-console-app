@@ -1,5 +1,5 @@
-use super::super::models::TransactionType::TransactionType;
+use super::super::models::Transaction_type::Transaction_type;
 
 pub trait Transaction {
-    fn log_history(&mut self, type_of_transaction: TransactionType, content: String) -> &str;
+    fn log_history(&mut self, type_of_transaction: Transaction_type, content: String) -> &str;
 }

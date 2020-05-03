@@ -1,44 +1,41 @@
-use super::super::models::AccountModel::Account;
-use super::super::models::AccountsModel::Accounts;
-use super::super::models::TransactionType::TransactionType;
-use super::super::models::TransferModel::Transfer;
-use super::super::traits::BankServiceTrait::BankServiceTrait;
-use super::super::traits::Transaction::Transaction;
-use super::super::services::FileDBContext::FileDBContext;
+use super::super::models::account_model::Account;
+use super::super::models::accounts_model::Accounts;
+use super::super::models::transfer_model::Transfer;
+use super::super::traits::BankServiceTrait::bank_service_trait;
 
 #[derive(Debug)]
 pub struct BankService<T> {
-    pub dbContext: T,
+    pub db_context: T,
 }
 
-impl<T> BankService<T> where T: BankServiceTrait {
-    pub fn new(dbContext: T) -> BankService<T> {
+impl<T> BankService<T> where T: bank_service_trait {
+    pub fn new(db_context: T) -> BankService<T> {
         BankService {
-            dbContext,
+            db_context,
         }
     }
 }
 
-impl<T> BankServiceTrait for BankService<T>
+impl<T> bank_service_trait for BankService<T>
 where
-    T: BankServiceTrait,
+    T: bank_service_trait,
 {
-    fn LoadData(&mut self) -> Accounts {
-        self.dbContext.LoadData()
+    fn load_data(&mut self) -> Accounts {
+        self.db_context.load_data()
     }
-    fn AddAccount(&mut self, account: Account) -> Result<Account, &str> {
-        self.dbContext.AddAccount(account)
+    fn add_account(&mut self, account: Account) -> Result<Account, &str> {
+        self.db_context.add_account(account)
     }
-    fn DeleteAccount(&mut self, account_no: i32) -> &'static str {
-        self.dbContext.DeleteAccount(account_no)
+    fn delete_account(&mut self, account_no: i32) -> &'static str {
+        self.db_context.delete_account(account_no)
     }
-    fn Deposit(&mut self, account_no: i32, amount: f64) -> Result<Accounts, &str> {
-        self.dbContext.Deposit(account_no, amount)
+    fn deposit(&mut self, account_no: i32, amount: f64) -> Result<Accounts, &str> {
+        self.db_context.deposit(account_no, amount)
     }
-    fn Withdraw(&mut self, account_no: i32, amount: f64) -> Result<Accounts, &str> {
-        self.dbContext.Withdraw(account_no, amount)
+    fn withdraw(&mut self, account_no: i32, amount: f64) -> Result<Accounts, &str> {
+        self.db_context.withdraw(account_no, amount)
     }
-    fn Transfer(&mut self, transfer: Transfer) -> Result<Accounts, &str> {
-        self.dbContext.Transfer(transfer)
+    fn transfer(&mut self, transfer: Transfer) -> Result<Accounts, &str> {
+        self.db_context.transfer(transfer)
     }
 }

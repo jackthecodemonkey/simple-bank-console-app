@@ -1,2 +1,2 @@
 pub mod FileTransactionImpl;
-pub mod BankServiceImpl;
+pub mod bank_service_impl;

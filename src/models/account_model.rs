@@ -13,26 +13,26 @@ impl Account {
         Account { no, name, deposit }
     }
 
-    pub fn Deposit(&mut self, amount: f64) -> &'static str {
+    pub fn deposit(&mut self, amount: f64) -> &'static str {
         self.deposit = self.deposit + amount;
-        return "Deposit successfully";
+        return "deposit successfully";
     }
 
-    pub fn CanWithdraw(&mut self, amount: f64) -> bool {
+    pub fn can_withdraw(&mut self, amount: f64) -> bool {
         return self.deposit >= amount;
     }
 
-    pub fn Withdraw(&mut self, amount: f64) -> Result<&'static str, &'static str> {
+    pub fn withdraw(&mut self, amount: f64) -> Result<&'static str, &'static str> {
         return match self.deposit < amount {
             true => Err("You don't have enough deposit to withdraw"),
             false => {
                 self.deposit = self.deposit - amount;
-                Ok("Withdraw successfully")
+                Ok("withdraw successfully")
             }
         };
     }
 
-    pub fn Stringify(&self) -> String {
+    pub fn stringify(&self) -> String {
         let mut s: String = String::from("\n");
         s.push_str(&self.no.to_string());
         s.push_str(",");
@@ -62,24 +62,24 @@ mod tests {
     #[test]
     fn should_deposit() {
         let mut account: Account = Account::new(1, "Jack".to_string(), 100.0);
-        account.Deposit(500.0);
+        account.deposit(500.0);
         assert_eq!(account.deposit, 600.0);
 
-        account.Deposit(700.0);
+        account.deposit(700.0);
         assert_eq!(account.deposit, 1300.0);
     }
 
     #[test]
     fn should_withdraw() {
         let mut account: Account = Account::new(1, "Jack".to_string(), 100.0);
-        assert_eq!(account.Withdraw(100.0), Ok("Withdraw successfully"));
+        assert_eq!(account.withdraw(100.0), Ok("withdraw successfully"));
     }
 
     #[test]
     fn should_not_withdraw() {
         let mut account: Account = Account::new(1, "Jack".to_string(), 100.0);
         assert_eq!(
-            account.Withdraw(101.0),
+            account.withdraw(101.0),
             Err("You don't have enough deposit to withdraw")
         );
     }
@@ -87,15 +87,15 @@ mod tests {
     #[test]
     fn should_determine_withdrawl() {
         let mut account: Account = Account::new(1, "Jack".to_string(), 100.0);
-        assert_eq!(account.CanWithdraw(50.0), true);
-        assert_eq!(account.CanWithdraw(100.0), true);
-        assert_eq!(account.CanWithdraw(101.0), false);
+        assert_eq!(account.can_withdraw(50.0), true);
+        assert_eq!(account.can_withdraw(100.0), true);
+        assert_eq!(account.can_withdraw(101.0), false);
     }
 
     #[test]
     fn should_convert_csv_string() {
-        let mut account: Account = Account::new(1, "Jack".to_string(), 100.0);
-        let string: String = account.Stringify();
+        let account: Account = Account::new(1, "Jack".to_string(), 100.0);
+        let string: String = account.stringify();
         assert_eq!(string, String::from("\n1,Jack,100"));
     }
 }

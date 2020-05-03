@@ -7,4 +7,6 @@
    and map to account model : DONE
    
    TODO:: Move dbcontext to SQLContext and clean up main.rs
-   implement logging transaction
+   implement logging transaction : TODO
+
+3. Clean up all warnings + review codes + make screenshot -> push to git

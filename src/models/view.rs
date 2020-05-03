@@ -1,23 +1,23 @@
 use std::io::{self};
 use std::str::FromStr;
-use super::super::traits::BankServiceTrait::BankServiceTrait;
-use super::super::models::AccountModel::Account;
-use super::super::models::TransferModel::Transfer;
+use super::super::traits::BankServiceTrait::bank_service_trait;
+use super::super::models::account_model::Account;
+use super::super::models::transfer_model::Transfer;
 
 pub struct View
 {
-    pub service: Box<dyn BankServiceTrait>,
+    pub service: Box<dyn bank_service_trait>,
 }
 
 impl View {
-    pub fn Display(&mut self) {
+    pub fn display(&mut self) {
         'outer: loop {
             println!("****Select transaction****");
-            println!("1. View All Accounts");
+            println!("1. view All Accounts");
             println!("2. Add Account");
             println!("3. Delete Account");
-            println!("4. Deposit");
-            println!("5. Withdraw");
+            println!("4. deposit");
+            println!("5. withdraw");
             println!("6. Transfer");
             println!("7. Exit");
             println!("****Enter a number****");
@@ -26,7 +26,7 @@ impl View {
             match trimmed.parse::<i32>() {
                 Ok(i) => match i {
                     1 => {
-                        let accounts = self.service.LoadData();
+                        let accounts = self.service.load_data();
                         for account in accounts.accounts.iter() {
                             println!("{:?}", account);
                         }
@@ -38,7 +38,7 @@ impl View {
                         ) {
                             Ok(account_details) => {
                                 let account: Account = Account::from_str(account_details);
-                                match self.service.AddAccount(account) {
+                                match self.service.add_account(account) {
                                     Ok(_) => {
                                         println!("Account successfully added.");
                                         break 'add_account;
@@ -59,7 +59,7 @@ impl View {
                         ) {
                             Ok(account_no) => {
                                 let no: i32 = FromStr::from_str(account_no.as_str()).unwrap();
-                                self.service.DeleteAccount(no);
+                                self.service.delete_account(no);
                                 println!("Account successfully deleted.");
                                 break 'delete_account;
                             }
@@ -75,7 +75,7 @@ impl View {
                                 let details: Vec<&str> = account_details.split(',').collect();
                                 let no: i32 = FromStr::from_str(details[0]).unwrap();
                                 let deposit: f64 = FromStr::from_str(details[1]).unwrap();
-                                match self.service.Deposit(no, deposit) {
+                                match self.service.deposit(no, deposit) {
                                     Ok(_) => {
                                         println!("Successfully deposited");
                                         break 'deposit;
@@ -95,7 +95,7 @@ impl View {
                                 let details: Vec<&str> = account_details.split(',').collect();
                                 let no: i32 = FromStr::from_str(details[0]).unwrap();
                                 let deposit: f64 = FromStr::from_str(details[1]).unwrap();
-                                match self.service.Withdraw(no, deposit) {
+                                match self.service.withdraw(no, deposit) {
                                     Ok(_) => {
                                         println!("Successfully withdrawn");
                                         break 'withdraw;
@@ -117,7 +117,7 @@ impl View {
                                 let to: i32 = i32::from_str(v[1]).unwrap();
                                 let amount: f64 = f64::from_str(v[2]).unwrap();
                                 let transfer: Transfer = Transfer { from, to, amount };
-                                match self.service.Transfer(transfer) {
+                                match self.service.transfer(transfer) {
                                     Ok(_) => {
                                         println!("Successfully transferred");
                                         break 'transfer;

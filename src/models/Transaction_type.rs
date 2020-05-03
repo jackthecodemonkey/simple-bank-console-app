@@ -1,13 +1,13 @@
 extern crate chrono;
 use chrono::prelude::*;
 
-pub enum TransactionType {
+pub enum Transaction_type {
     Deposit,
     Withdraw,
     Transfer,
 }
 
-impl TransactionType {
+impl Transaction_type {
     pub fn get_transction_content(&self, content: String) -> String {
         let now = Local::now();
         let mut string = String::from(content);
@@ -15,13 +15,13 @@ impl TransactionType {
             string.push_str(", ");
         }
         match self {
-            TransactionType::Deposit => {
+            Transaction_type::Deposit => {
                 string.push_str("type: deposit");
             }
-            TransactionType::Withdraw => {
+            Transaction_type::Withdraw => {
                 string.push_str("type: withdraw");
             }
-            TransactionType::Transfer => {
+            Transaction_type::Transfer => {
                 string.push_str("type: transfer");
             }
         };

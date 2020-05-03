@@ -1,13 +1,13 @@
 use super::super::traits::ValidateCommands::ValidateCommands;
 
 #[derive(Debug)]
-pub struct Commands {
+pub struct commands {
     pub arguments: Vec<String>,
 }
 
-impl Commands {
+impl commands {
     pub fn new(commands: Vec<String>) -> Self {
-        Commands {
+        commands {
             arguments: commands,
         }
     }
@@ -18,7 +18,7 @@ pub struct ValidCommands {
     pub valid_commands: Vec<String>,
 }
 
-impl ValidateCommands for Commands {
+impl ValidateCommands for commands {
     fn validate(&self, valid_commands: &ValidCommands) -> Result<(), String> {
         let mut invalid_commands: String = String::from("");
         for argument in self.arguments.iter() {
