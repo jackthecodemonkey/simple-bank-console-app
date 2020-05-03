@@ -28,13 +28,13 @@ impl SQLContext {
     fn write_transaction(
         &self,
         account_no: i32,
-        Transaction_type: Transaction_type,
+        transaction_type: Transaction_type,
         amount: f64,
         current_balance: f64,
     ) -> Result<(), &str> {
         let transaction = NewTransaction {
             no: account_no,
-            Transaction_type: match Transaction_type {
+            transaction_type: match transaction_type {
                 Transaction_type::Deposit => "deposit".to_string(),
                 Transaction_type::Withdraw => "withdraw".to_string(),
                 Transaction_type::Transfer => "Transfer".to_string(),
