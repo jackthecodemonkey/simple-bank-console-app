@@ -21,7 +21,6 @@ impl<'a, 'b> bank_service_trait for FileDBContext<'a, 'b> {
                 .filter(|&x| *&x != "")
                 .map(|x| -> Account {
                     let sliced: Vec<&str> = x.split(",").collect();
-                    println!("{:?}", sliced);
                     if sliced.len() != 3 {
                         panic!("data is currupted");
                     }

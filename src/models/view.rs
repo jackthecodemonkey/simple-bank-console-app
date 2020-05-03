@@ -13,7 +13,7 @@ impl View {
     pub fn display(&mut self) {
         'outer: loop {
             println!("****Select transaction****");
-            println!("1. view All Accounts");
+            println!("1. View All Accounts");
             println!("2. Add Account");
             println!("3. Delete Account");
             println!("4. deposit");
