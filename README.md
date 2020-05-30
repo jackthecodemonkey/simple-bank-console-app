@@ -1,4 +1,4 @@
-## First console app I made using Rust as a fun project
+## First console app using Rust
 
 ### Features 
 * Switch data storage between a text file or PostgreSQL by arguments
